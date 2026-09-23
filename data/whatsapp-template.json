@@ -1,0 +1,16 @@
+{
+  "header": "🍽️ *NEW ORDER — Papa Ginou's*",
+  "divider": "━━━━━━━━━━━━━━━━━━━━━━",
+  "customerSectionTitle": "👤 *CUSTOMER DETAILS*",
+  "orderSectionTitle": "🛒 *ORDER DETAILS*",
+  "paymentSectionTitle": "💰 *PAYMENT SUMMARY*",
+  "nameLineFormat": "• Name: {customerName}",
+  "phoneLineFormat": "• Phone: {phone}",
+  "addressLineFormat": "• Address: {address}",
+  "notesLineFormat": "• Notes: {note}",
+  "itemLineFormat": "• {productName}{sizeSuffix} × {quantity} — Rs. {lineTotal}",
+  "totalLineFormat": "• *TOTAL: Rs. {total}*",
+  "deliveryNoteFormat": "{freeText} — {beyondShort}",
+  "deliveryLineFormat": "🚚 {deliveryNote}",
+  "footerLine": "📲 *Please confirm the order and delivery charges.*"
+}
