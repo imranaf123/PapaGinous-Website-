@@ -1,0 +1,31 @@
+/* Checkout page */
+.checkout-wrap{max-width:660px;margin:0 auto;padding-top:26px;padding-bottom:10px}
+.checkout-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;
+  box-shadow:var(--shadow);margin-bottom:16px}
+.checkout-card h2{margin:0 0 4px;font-size:18px}
+.checkout-card .card-sub{margin:0 0 16px;font-size:13.5px;color:var(--muted)}
+.review-line{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:9px 0;border-bottom:1px dashed var(--border)}
+.review-line:last-child{border:0}
+.review-line .rl-name{font-weight:600}
+.review-line .rl-name small{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.review-line .rl-total{font-weight:700;white-space:nowrap}
+.offline-note{display:none;background:var(--rose-soft);border:1px solid var(--red);border-radius:12px;padding:12px 14px;
+  font-size:13.5px;margin-bottom:14px}
+body.is-offline .offline-note{display:block}
+body.is-offline #place-order{opacity:.5;pointer-events:none}
+.success-card{text-align:center;padding:36px 22px}
+.success-card svg.big{width:60px;height:60px;color:#22A355;margin-bottom:10px}
+.success-card h2{margin:0 0 8px}
+.success-card p{color:var(--muted);font-size:14px;margin:0 0 8px}
+.success-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.success-actions .btn{flex:1;min-width:200px}
+/* Simplified checkout header */
+.back-link{display:inline-flex;align-items:center;gap:2px;font-size:13.5px;font-weight:600;color:var(--muted);
+  text-decoration:none;margin-left:auto;margin-right:2px;padding:10px 8px;white-space:nowrap}
+.back-link:hover{color:var(--red)}
+.back-link svg{width:18px;height:18px}
+body.checkout .brand{margin-right:0}
+
+#reopen-wa{text-decoration:none}
+.wa-fallback-wrap{margin:10px 0 0;text-align:center;font-size:13px}
+.wa-fallback-wrap a{color:var(--muted);text-decoration:underline}

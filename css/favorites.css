@@ -1,0 +1,11 @@
+/* Favorites page */
+.fav-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+.fav-grid .card-body{padding:12px}
+.fav-grid .card-body h3{font-size:13.5px}
+.fav-grid .btn{padding:9px 10px;font-size:12.5px;min-height:40px}
+@media (min-width:768px){
+  .fav-grid{grid-template-columns:repeat(3,1fr);gap:16px}
+  .fav-grid .card-body h3{font-size:15px}
+  .fav-grid .btn{font-size:13.5px}
+}
+@media (min-width:1024px){.fav-grid{grid-template-columns:repeat(4,1fr)}}
