@@ -38,16 +38,21 @@ self.addEventListener('fetch', function (e) {
     }).catch(function () { return caches.match(req); }));
     return;
   }
-  // Images: cache-first
-  if (req.destination === 'image' || /\.(png|jpe?g|svg|webp|ico)$/i.test(url.pathname)) {
-    e.respondWith(caches.match(req).then(function (hit) {
-      return hit || fetch(req).then(function (res) {
-        var copy = res.clone();
-        caches.open(IMG).then(function (c) { c.put(req, copy); });
-        return res;
+// Images: network-first
+if (req.destination === 'image' || /\.(png|jpe?g|svg|webp|ico)$/i.test(url.pathname)) {
+  e.respondWith(
+    fetch(req).then(function (res) {
+      var copy = res.clone();
+      caches.open(IMG).then(function (c) {
+        c.put(req, copy);
       });
-    }));
-    return;
+      return res;
+    }).catch(function () {
+      return caches.match(req);
+    })
+  );
+  return;
+}
   }
   // Navigations: network-first, then cache, then offline page
   if (req.mode === 'navigate') {
