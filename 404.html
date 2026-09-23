@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page Not Found — Papa Ginou's</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/images/brand/favicon.ico" sizes="any">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Montserrat,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:#fff;color:#14181D;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+.card{text-align:center;max-width:420px}.brand404{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;text-align:left}
+.brand404 img{width:40px;height:40px;object-fit:contain}.brand404 strong{display:block;font-size:20px;font-weight:800;color:#E11B23;letter-spacing:-.01em}
+.brand404 small{display:block;font-size:11px;font-weight:600;color:#14181D}
+h1{margin:0 0 8px;font-size:26px;letter-spacing:-.01em}p{margin:0 0 22px;color:#6B7280;font-size:15px}
+a.back{display:inline-block;background:#E11B23;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:12px 28px;border-radius:999px}
+a.back:hover{background:#B81218}
+@media (prefers-color-scheme:dark){body{background:#0C0E12;color:#F4F6F8}p{color:#9AA3AD}.brand404 small{color:#F4F6F8}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand404">
+    <img id="brand-logo" src="/assets/images/brand/logo-icon.svg" alt="Papa Ginou's logo" width="40" height="40">
+    <span><strong id="brand-name">Papa Ginou's</strong><small id="brand-tagline">Pizza &amp; Fast Food</small></span>
+  </div>
+  <h1>PAGE NOT FOUND</h1>
+  <p>Sorry, we couldn't find that page.</p>
+  <a class="back" href="/">BACK TO HOME</a>
+</div>
+<script>
+(function () {
+  function apply(b) {
+    if (!b) return;
+    var img = document.getElementById('brand-logo');
+    if (img && b.logoIcon) img.setAttribute('src', '/' + String(b.logoIcon).replace(/^\//, ''));
+    var n = document.getElementById('brand-name');
+    if (n && b.brandName) n.textContent = b.brandName;
+    var t = document.getElementById('brand-tagline');
+    if (t && b.brandTagline) t.textContent = b.brandTagline;
+    if (b.brandName) document.title = 'Page Not Found — ' + b.brandName;
+  }
+  try {
+    fetch('/data/settings.json', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (s) { if (s && s.branding) apply(s.branding); })
+      .catch(function () {});
+  } catch (e) { /* static fallback above stays in place */ }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — Papa Ginou's</title>
+<meta name="description" content="Contact Papa Ginou's: call, WhatsApp, location and delivery information.">
+<meta name="theme-color" content="#E11B23">
+<link rel="icon" href="assets/images/brand/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/images/brand/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact — Papa Ginou's">
+<meta property="og:description" content="Call, WhatsApp, location and delivery information.">
+<meta property="og:image" content="assets/images/brand/og-cover.jpg">
+<script>try{if((localStorage.getItem('papaGinousTheme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'))==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/contact.css">
+</head>
+<body data-page="contact">
+<header class="site-header">
+  <div class="container header-in">
+    <button class="icon-btn hamburger" data-drawer-open aria-label="Open menu" data-icon="menu"></button>
+    <a class="brand" href="index.html" aria-label="Papa Ginou's — home">
+      <img class="brand-mark" data-brand-logo src="assets/images/brand/logo-icon.svg" alt="Papa Ginou's logo" width="34" height="34">
+      <span class="brand-text"><strong data-brand-name>Papa Ginou's</strong><small data-brand-tagline>Pizza &amp; Fast Food</small></span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="index.html" data-nav="home">Home</a>
+      <a href="menu.html" data-nav="menu">Menu</a>
+      <a href="favorites.html" data-nav="favorites">Favorites</a>
+      <a href="menu.html#deals" data-nav="deals">Deals</a>
+      <a href="about.html" data-nav="about">About</a>
+      <a href="contact.html" data-nav="contact">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn search-btn" data-search-go aria-label="Search the menu" data-icon="search"></button>
+      <button class="icon-btn" data-theme-btn aria-label="Switch theme"></button>
+      <a class="icon-btn" href="cart.html" aria-label="Open cart"><span data-icon="cart" aria-hidden="true"></span><span class="cart-count" data-cart-badge hidden>0</span></a>
+    </div>
+  </div>
+</header>
+
+<div class="drawer-backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="Site menu">
+  <div class="drawer-head">
+    <a class="brand" href="index.html" aria-label="Papa Ginou's — home">
+      <img class="brand-mark" data-brand-logo src="assets/images/brand/logo-icon.svg" alt="Papa Ginou's logo" width="34" height="34">
+      <span class="brand-text"><strong data-brand-name>Papa Ginou's</strong><small data-brand-tagline>Pizza &amp; Fast Food</small></span>
+    </a>
+    <button class="icon-btn" data-drawer-close aria-label="Close menu" data-icon="x"></button>
+  </div>
+  <nav aria-label="Mobile">
+    <a href="index.html" data-nav="home"><span data-icon="home" aria-hidden="true"></span>Home</a>
+    <a href="menu.html" data-nav="menu"><span data-icon="list" aria-hidden="true"></span>Menu</a>
+    <a href="favorites.html" data-nav="favorites"><span data-icon="heart" aria-hidden="true"></span>Favorites</a>
+    <a href="menu.html#deals" data-nav="deals"><span data-icon="tag" aria-hidden="true"></span>Deals</a>
+    <a href="about.html" data-nav="about"><span data-icon="info" aria-hidden="true"></span>About</a>
+    <a href="contact.html" data-nav="contact"><span data-icon="phone" aria-hidden="true"></span>Contact</a>
+    <a href="menu.html" data-search-go><span data-icon="search" aria-hidden="true"></span>Search menu</a>
+  </nav>
+  <div class="drawer-foot">
+    <a class="btn btn-primary btn-block" data-wa-order href="https://wa.me/923292470024"><span data-icon="whatsapp" aria-hidden="true"></span>Order on WhatsApp</a>
+    <p class="drawer-delivery"><span data-icon="truck" aria-hidden="true"></span><span><span data-delivery-free>Free within 2 km</span> · <span data-delivery-beyond>Beyond 2 km: Delivery charges apply</span></span></p>
+  </div>
+</aside>
+
+<main>
+  <div class="container">
+    <div class="page-head" style="padding-left:0;padding-right:0">
+      <h1>Contact</h1>
+      <p>Call, message, or find us — we're easy to reach</p>
+    </div>
+    <div class="action-grid">
+      <a class="action-btn" data-call-link href="tel:+923194343956">
+        <span class="action-ic" data-icon="phone" aria-hidden="true"></span>
+        <span>Call <span data-phone-text>0319-4343956</span><small>Tap to call the restaurant</small></span>
+        <span data-icon="chevron-right" data-append aria-hidden="true" class="go" style="display:flex"></span>
+      </a>
+      <a class="action-btn" data-wa-order href="https://wa.me/923292470024">
+        <span class="action-ic" data-icon="whatsapp" aria-hidden="true"></span>
+        <span>WhatsApp Orders<small><span data-wa-text>0329-2470024</span> · fastest for orders</small></span>
+        <span data-icon="chevron-right" data-append aria-hidden="true" class="go" style="display:flex"></span>
+      </a>
+      <a class="action-btn" id="wa2-btn" href="#" hidden>
+        <span class="action-ic" data-icon="whatsapp" aria-hidden="true"></span>
+        <span>WhatsApp (2)<small id="wa2-text"></small></span>
+        <span data-icon="chevron-right" data-append aria-hidden="true" class="go" style="display:flex"></span>
+      </a>
+      <a class="action-btn" data-directions-link href="#">
+        <span class="action-ic" data-icon="navigation" aria-hidden="true"></span>
+        <span>Get Directions<small>Open in Google Maps</small></span>
+        <span data-icon="chevron-right" data-append aria-hidden="true" class="go" style="display:flex"></span>
+      </a>
+    </div>
+    <div class="contact-cards">
+      <div class="contact-card">
+        <h2><span data-icon="map-pin" aria-hidden="true"></span>Location</h2>
+        <p><strong data-address>Subhan Commercial Center, Near Patrolling Chowki, Basti Malook</strong></p>
+        <p>Plus Code: <strong id="plus-code">VG2Q+3W3 Basti Malook</strong></p>
+      </div>
+      <div class="contact-card" id="hours-card" hidden>
+        <h2><span data-icon="clock" aria-hidden="true"></span>Opening Hours</h2>
+        <ul class="hours-list" id="hours-list"></ul>
+      </div>
+      <div class="contact-card">
+        <h2><span data-icon="truck" aria-hidden="true"></span>Delivery</h2>
+        <p><strong data-delivery-free>Free within 2 km</strong></p>
+        <p data-delivery-beyond>Beyond 2 km: Delivery charges apply</p>
+      </div>
+      <div class="contact-card" id="socials-card" hidden>
+        <h2><span data-icon="info" aria-hidden="true"></span>Follow Us</h2>
+        <div class="social-row" id="socials-list" style="display:flex"></div>
+      </div>
+    </div>
+    <div style="margin-top:22px">
+      <a class="btn btn-primary btn-block" data-wa-order href="https://wa.me/923292470024">ORDER ON WHATSAPP</a>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-in">
+    <div class="footer-brand">
+      <img class="brand-mark" data-brand-logo src="assets/images/brand/logo-icon.svg" alt="Papa Ginou's logo" width="34" height="34">
+      <span><strong data-brand-name>Papa Ginou's</strong><small data-brand-tagline>Pizza &amp; Fast Food</small></span>
+    </div>
+    <div class="footer-grid">
+      <div><h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="index.html"><span data-icon="home" aria-hidden="true"></span>Home</a></li>
+          <li><a href="menu.html"><span data-icon="list" aria-hidden="true"></span>Menu</a></li>
+          <li><a href="favorites.html"><span data-icon="heart" aria-hidden="true"></span>Favorites</a></li>
+          <li><a href="menu.html#deals"><span data-icon="tag" aria-hidden="true"></span>Deals</a></li>
+          <li><a href="about.html"><span data-icon="info" aria-hidden="true"></span>About</a></li>
+          <li><a href="contact.html"><span data-icon="phone" aria-hidden="true"></span>Contact</a></li>
+        </ul>
+      </div>
+      <div><h3>Contact</h3>
+        <ul class="footer-contact">
+          <li><span data-icon="map-pin" aria-hidden="true"></span><span data-address>Subhan Commercial Center, Near Patrolling Chowki, Basti Malook</span></li>
+          <li><span data-icon="phone" aria-hidden="true"></span><a data-call-link href="tel:+923194343956"><span data-phone-text>0319-4343956</span></a></li>
+          <li><span data-icon="whatsapp" aria-hidden="true"></span><a data-wa-order href="https://wa.me/923292470024">WhatsApp: <span data-wa-text>0329-2470024</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-delivery"><h3>Delivery</h3>
+        <p><span data-icon="truck" aria-hidden="true"></span><span data-delivery-free>Free within 2 km</span></p>
+        <p><span data-icon="info" aria-hidden="true"></span><span data-delivery-beyond>Beyond 2 km: Delivery charges apply</span></p>
+        <div class="social-row" data-socials></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><span data-footer-credit>Designed &amp; Developed by Imran AF</span></div>
+  </div>
+</footer>
+
+<nav class="bottom-nav" aria-label="Mobile">
+  <ul>
+    <li><a href="index.html" data-nav="home"><span data-icon="home" aria-hidden="true"></span><span>Home</span></a></li>
+    <li><a href="menu.html" data-nav="menu"><span data-icon="list" aria-hidden="true"></span><span>Menu</span></a></li>
+    <li><a href="favorites.html" data-nav="favorites"><span data-icon="heart" aria-hidden="true"></span><span>Favorites</span></a></li>
+    <li><a href="cart.html" data-nav="cart"><span data-icon="cart" aria-hidden="true"></span><span>Cart</span><span class="cart-count" data-cart-badge hidden>0</span></a></li>
+  </ul>
+</nav>
+
+<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true" aria-label="Choose options"></div></div>
+<div class="toast-root" aria-live="polite"></div>
+<noscript><div class="container"><p class="noscript-card"><strong>JavaScript is required.</strong> Please enable JavaScript to browse the menu, use the cart, and place an order.</p></div></noscript>
+<script src="js/global.js" defer></script>
+<script defer>
+document.addEventListener('DOMContentLoaded', function () {
+  PG.ready.then(function () {
+    var c = PG.contact;
+    if (c.plusCode) document.getElementById('plus-code').textContent = c.plusCode;
+    if (c.whatsappSecondaryIntl) {
+      var b = document.getElementById('wa2-btn');
+      b.hidden = false;
+      b.href = 'https://wa.me/' + PG.waDigits(c.whatsappSecondaryIntl);
+      b.target = '_blank'; b.rel = 'noopener';
+      document.getElementById('wa2-text').textContent = c.whatsappSecondary || '';
+    }
+    if (Array.isArray(c.hours) && c.hours.length) {
+      document.getElementById('hours-card').hidden = false;
+      document.getElementById('hours-list').innerHTML = c.hours.map(function (h) {
+        return '<li><span>' + PG.esc(h.days || '') + '</span><strong>' + PG.esc(h.time || '') + '</strong></li>';
+      }).join('');
+    }
+    var socials = (c.socials || []).filter(function (s) { return s && s.url && /^https:\/\//i.test(s.url); });
+    if (socials.length) {
+      document.getElementById('socials-card').hidden = false;
+      var map = { facebook: 'facebook', instagram: 'instagram', tiktok: 'tiktok', youtube: 'youtube' };
+      document.getElementById('socials-list').innerHTML = socials.map(function (s) {
+        var ic = map[String(s.platform || '').toLowerCase()] || 'info';
+        return '<a href="' + PG.esc(s.url) + '" target="_blank" rel="noopener" aria-label="' + PG.esc(s.platform || 'Social link') + '">' + PG.icon(ic) + '</a>';
+      }).join('');
+    }
+  }).catch(function () { PG.fatal('Could not load this page. Please check your connection and retry.'); });
+});
+</script>
+</body>
+</html>
