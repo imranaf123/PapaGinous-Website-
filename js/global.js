@@ -37,11 +37,13 @@
     youtube: '<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',
     tiktok: '<circle cx="7" cy="18" r="3"/><path d="M10 18V4l9-2v13"/><circle cx="19" cy="15" r="2.4"/>'
   };
+
   var FILLED = {
     'heart-filled': '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
     star: '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>',
     chef: '<path d="M12 2.6c-2.4 0-4.3 1.6-4.8 3.8C5.2 6.8 3.8 8.4 3.8 10.3c0 2.3 1.9 4.1 4.2 4.1h8c2.3 0 4.2-1.8 4.2-4.1 0-1.9-1.4-3.5-3.4-3.9C16.3 4.2 14.4 2.6 12 2.6Z"/><rect x="7" y="15.2" width="10" height="5.6" rx="1"/><path d="M10 6.6v2.6M12 6.1v3M14 6.6v2.6" stroke="#fff" stroke-width="1.1"/>'
   };
+
   function icon(name, cls) {
     var filled = !!FILLED[name];
     var body = FILLED[name] || P[name] || P.info;
@@ -51,687 +53,2681 @@
   }
 
   /* ================= Utilities ================= */
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-  function validNumber(n) { return typeof n === 'number' && isFinite(n) && n > 0; }
+
+  function validNumber(n) {
+    return typeof n === 'number' && isFinite(n) && n > 0;
+  }
+
   function byDisplayOrder(a, b) {
     var da = (a && typeof a.displayOrder === 'number') ? a.displayOrder : 9999;
     var db = (b && typeof b.displayOrder === 'number') ? b.displayOrder : 9999;
     return da - db;
   }
-  function emit(name, detail) { document.dispatchEvent(new CustomEvent(name, { detail: detail })); }
-  function on(name, fn) { document.addEventListener(name, fn); }
+
+  function emit(name, detail) {
+    document.dispatchEvent(new CustomEvent(name, { detail: detail }));
+  }
+
+  function on(name, fn) {
+    document.addEventListener(name, fn);
+  }
 
   /* ================= Data layer ================= */
+
   var cache = {};
+
   function fetchJSON(path) {
     if (cache[path]) return Promise.resolve(cache[path]);
-    return fetch(path, { headers: { 'Accept': 'application/json' } }).then(function (r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status + ' for ' + path);
-      return r.json();
-    }).then(function (j) { cache[path] = j; return j; });
+
+    return fetch(path, {
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status + ' for ' + path);
+        return r.json();
+      })
+      .then(function (j) {
+        cache[path] = j;
+        return j;
+      });
   }
 
   var PG = {
-    icon: icon, esc: esc, on: on, emit: emit,
-    settings: null, contact: null, menu: null, deals: null, waTemplate: null,
-    ready: null, catalogReady: null
+    icon: icon,
+    esc: esc,
+    on: on,
+    emit: emit,
+    settings: null,
+    contact: null,
+    menu: null,
+    deals: null,
+    waTemplate: null,
+    ready: null,
+    catalogReady: null
   };
 
-  PG.ready = Promise.all([fetchJSON('data/settings.json'), fetchJSON('data/contact.json')]).then(function (res) {
-    PG.settings = res[0]; PG.contact = res[1];
+  PG.ready = Promise.all([
+    fetchJSON('data/settings.json'),
+    fetchJSON('data/contact.json')
+  ]).then(function (res) {
+    PG.settings = res[0];
+    PG.contact = res[1];
+
     validateSettings(PG.settings);
     hydrateChrome();
+
     return PG;
   });
 
   PG.catalogReady = PG.ready.then(function () {
-    return Promise.all([fetchJSON('data/menu.json'), fetchJSON('data/deals.json'), fetchJSON('data/whatsapp-template.json')]).then(function (res) {
-      PG.menu = res[0]; PG.deals = res[1]; PG.waTemplate = res[2];
-      if (!PG.menu || !Array.isArray(PG.menu.products)) throw new Error('menu.json invalid');
-      if (!PG.deals || !Array.isArray(PG.deals.deals)) throw new Error('deals.json invalid');
+    return Promise.all([
+      fetchJSON('data/menu.json'),
+      fetchJSON('data/deals.json'),
+      fetchJSON('data/whatsapp-template.json')
+    ]).then(function (res) {
+      PG.menu = res[0];
+      PG.deals = res[1];
+      PG.waTemplate = res[2];
+
+      if (!PG.menu || !Array.isArray(PG.menu.products)) {
+        throw new Error('menu.json invalid');
+      }
+
+      if (!PG.deals || !Array.isArray(PG.deals.deals)) {
+        throw new Error('deals.json invalid');
+      }
+
       validateWaTemplate(PG.waTemplate);
+
+      /*
+       * The current JSON catalog is the source of truth for prices.
+       * Existing cart items are synchronized here whenever the
+       * latest catalog becomes available.
+       */
+      syncCartPricesWithCatalog();
+
       pruneFavorites();
-      updateBadges(); refreshFavButtons();
+      updateBadges();
+      refreshFavButtons();
+
+      /*
+       * Let the current page know that the catalog-backed cart
+       * may have changed.
+       */
+      emit('pg:cart', { items: cart.items });
+
       return PG;
     });
   });
 
   function validateSettings(s) {
-    if (!s || !s.branding || !s.branding.brandName || !s.currency || !s.whatsappPrimary) throw new Error('settings.json invalid');
+    if (
+      !s ||
+      !s.branding ||
+      !s.branding.brandName ||
+      !s.currency ||
+      !s.whatsappPrimary
+    ) {
+      throw new Error('settings.json invalid');
+    }
   }
+
   function validateWaTemplate(t) {
-    var keys = ['header', 'divider', 'customerSectionTitle', 'orderSectionTitle', 'paymentSectionTitle',
-      'nameLineFormat', 'phoneLineFormat', 'addressLineFormat', 'notesLineFormat', 'itemLineFormat',
-      'totalLineFormat', 'deliveryNoteFormat', 'deliveryLineFormat', 'footerLine'];
-    var ok = t && keys.every(function (k) { return typeof t[k] === 'string' && t[k]; });
+    var keys = [
+      'header',
+      'divider',
+      'customerSectionTitle',
+      'orderSectionTitle',
+      'paymentSectionTitle',
+      'nameLineFormat',
+      'phoneLineFormat',
+      'addressLineFormat',
+      'notesLineFormat',
+      'itemLineFormat',
+      'totalLineFormat',
+      'deliveryNoteFormat',
+      'deliveryLineFormat',
+      'footerLine'
+    ];
+
+    var ok = t && keys.every(function (k) {
+      return typeof t[k] === 'string' && t[k];
+    });
+
     if (!ok) throw new Error('whatsapp-template.json invalid');
   }
 
   PG.productById = function (id) {
     if (!PG.menu) return null;
-    for (var i = 0; i < PG.menu.products.length; i++) if (PG.menu.products[i].id === id) return PG.menu.products[i];
+
+    for (var i = 0; i < PG.menu.products.length; i++) {
+      if (PG.menu.products[i].id === id) {
+        return PG.menu.products[i];
+      }
+    }
+
     return null;
   };
+
   PG.dealById = function (id) {
     if (!PG.deals) return null;
-    for (var i = 0; i < PG.deals.deals.length; i++) if (PG.deals.deals[i].id === id) return PG.deals.deals[i];
+
+    for (var i = 0; i < PG.deals.deals.length; i++) {
+      if (PG.deals.deals[i].id === id) {
+        return PG.deals.deals[i];
+      }
+    }
+
     return null;
   };
+
   PG.categoryName = function (id) {
     if (id === 'other') return 'Other';
+
     if (PG.menu && Array.isArray(PG.menu.categories)) {
-      for (var i = 0; i < PG.menu.categories.length; i++) if (PG.menu.categories[i].id === id) return PG.menu.categories[i].name;
+      for (var i = 0; i < PG.menu.categories.length; i++) {
+        if (PG.menu.categories[i].id === id) {
+          return PG.menu.categories[i].name;
+        }
+      }
     }
+
     return 'Other';
   };
+
   PG.sortedCategories = function () {
-    var cats = (PG.menu && PG.menu.categories ? PG.menu.categories.slice() : []).sort(byDisplayOrder);
-    var known = {}, i;
-    for (i = 0; i < cats.length; i++) known[cats[i].id] = true;
+    var cats = (
+      PG.menu && PG.menu.categories
+        ? PG.menu.categories.slice()
+        : []
+    ).sort(byDisplayOrder);
+
+    var known = {};
+    var i;
+
+    for (i = 0; i < cats.length; i++) {
+      known[cats[i].id] = true;
+    }
+
     var counts = {};
+
     PG.menu.products.forEach(function (p) {
       var c = known[p.category] ? p.category : 'other';
-      if (p.availability !== false) counts[c] = (counts[c] || 0) + 1;
+
+      if (p.availability !== false) {
+        counts[c] = (counts[c] || 0) + 1;
+      }
     });
-    var out = cats.filter(function (c) { return counts[c.id] > 0; });
-    if (counts.other > 0) out.push({ id: 'other', name: 'Other', displayOrder: 9999 });
+
+    var out = cats.filter(function (c) {
+      return counts[c.id] > 0;
+    });
+
+    if (counts.other > 0) {
+      out.push({
+        id: 'other',
+        name: 'Other',
+        displayOrder: 9999
+      });
+    }
+
     return out;
   };
 
   /* -------- prices / sizes -------- */
+
   PG.sizesOf = function (p) {
     if (!p || !Array.isArray(p.sizes)) return [];
-    return p.sizes.filter(function (s) { return s && validNumber(s.price); });
+
+    return p.sizes.filter(function (s) {
+      return s && validNumber(s.price);
+    });
   };
+
   PG.priceInfo = function (p) {
     var sizes = PG.sizesOf(p);
+
     if (sizes.length > 0) {
-      var def = null, i;
-      for (i = 0; i < sizes.length; i++) if (sizes[i].id === p.defaultSizeId) def = sizes[i];
+      var def = null;
+      var i;
+
+      for (i = 0; i < sizes.length; i++) {
+        if (sizes[i].id === p.defaultSizeId) {
+          def = sizes[i];
+        }
+      }
+
       if (!def) def = sizes[0];
+
       var min = sizes[0].price;
-      for (i = 1; i < sizes.length; i++) if (sizes[i].price < min) min = sizes[i].price;
-      return { kind: 'sized', sizes: sizes, def: def, from: min };
+
+      for (i = 1; i < sizes.length; i++) {
+        if (sizes[i].price < min) {
+          min = sizes[i].price;
+        }
+      }
+
+      return {
+        kind: 'sized',
+        sizes: sizes,
+        def: def,
+        from: min
+      };
     }
-    if (validNumber(p.price)) return { kind: 'single', price: p.price };
-    return { kind: 'invalid' };
+
+    if (validNumber(p.price)) {
+      return {
+        kind: 'single',
+        price: p.price
+      };
+    }
+
+    return {
+      kind: 'invalid'
+    };
   };
+
   PG.sizeName = function (p, sizeId) {
-    if (!p || !Array.isArray(p.sizes)) return sizeId ? String(sizeId) : '';
-    for (var i = 0; i < p.sizes.length; i++) if (p.sizes[i].id === sizeId) return p.sizes[i].name;
+    if (!p || !Array.isArray(p.sizes)) {
+      return sizeId ? String(sizeId) : '';
+    }
+
+    for (var i = 0; i < p.sizes.length; i++) {
+      if (p.sizes[i].id === sizeId) {
+        return p.sizes[i].name;
+      }
+    }
+
     return String(sizeId == null ? '' : sizeId);
   };
+
   PG.priceLabel = function (p) {
     var info = PG.priceInfo(p);
-    if (info.kind === 'sized') return 'from ' + PG.fmtPKR(info.from);
-    if (info.kind === 'single') return PG.fmtPKR(info.price);
+
+    if (info.kind === 'sized') {
+      return 'from ' + PG.fmtPKR(info.from);
+    }
+
+    if (info.kind === 'single') {
+      return PG.fmtPKR(info.price);
+    }
+
     return 'Price unavailable';
   };
+
   PG.fmtPKR = function (n) {
-    var sym = (PG.settings && PG.settings.currency && PG.settings.currency.symbol) || 'Rs. ';
+    var sym = (
+      PG.settings &&
+      PG.settings.currency &&
+      PG.settings.currency.symbol
+    ) || 'Rs. ';
+
     var num = Math.round(Number(n) || 0);
-    return sym + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    return sym + num.toString().replace(
+      /\B(?=(\d{3})+(?!\d))/g,
+      ','
+    );
   };
+
   PG.fmtNum = function (n) {
-    return Math.round(Number(n) || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return Math.round(Number(n) || 0).toString().replace(
+      /\B(?=(\d{3})+(?!\d))/g,
+      ','
+    );
   };
+
   PG.fmtDate = function (iso) {
     try {
       var d = new Date(String(iso) + 'T00:00:00');
+
       if (isNaN(d)) return String(iso);
-      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    } catch (e) { return String(iso); }
+
+      return d.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch (e) {
+      return String(iso);
+    }
   };
 
   /* ================= Theme ================= */
+
   var THEME_KEY = 'papaGinousTheme';
-  function currentTheme() { return document.documentElement.getAttribute('data-theme') || 'light'; }
+
+  function currentTheme() {
+    return document.documentElement.getAttribute('data-theme') || 'light';
+  }
+
   function applyTheme(t, persist) {
     document.documentElement.setAttribute('data-theme', t);
-    try { if (persist) localStorage.setItem(THEME_KEY, t); } catch (e) {}
+
+    try {
+      if (persist) {
+        localStorage.setItem(THEME_KEY, t);
+      }
+    } catch (e) {}
+
     var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', t === 'dark' ? '#0C0E12' : '#E11B23');
+
+    if (meta) {
+      meta.setAttribute(
+        'content',
+        t === 'dark' ? '#0C0E12' : '#E11B23'
+      );
+    }
+
     document.querySelectorAll('[data-theme-btn]').forEach(function (b) {
       b.innerHTML = icon(t === 'dark' ? 'sun' : 'moon');
-      b.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      b.setAttribute(
+        'aria-label',
+        t === 'dark'
+          ? 'Switch to light theme'
+          : 'Switch to dark theme'
+      );
     });
+
     emit('pg:theme', { theme: t });
   }
-  PG.toggleTheme = function () { applyTheme(currentTheme() === 'dark' ? 'light' : 'dark', true); };
+
+  PG.toggleTheme = function () {
+    applyTheme(
+      currentTheme() === 'dark' ? 'light' : 'dark',
+      true
+    );
+  };
+
   function initTheme() {
     var saved = null;
-    try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
-    var t = (saved === 'dark' || saved === 'light') ? saved :
-      (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+    try {
+      saved = localStorage.getItem(THEME_KEY);
+    } catch (e) {}
+
+    var t = (
+      saved === 'dark' ||
+      saved === 'light'
+    )
+      ? saved
+      : (
+          window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        );
+
     applyTheme(t, false);
   }
 
   /* ================= Storage: cart & favorites ================= */
-  var CART_KEY = 'papaGinousCart', FAV_KEY = 'papaGinousFavorites';
+
+  var CART_KEY = 'papaGinousCart';
+  var FAV_KEY = 'papaGinousFavorites';
+
   function readStore(key, fallback) {
     try {
       var raw = localStorage.getItem(key);
+
       if (!raw) return fallback;
+
       var j = JSON.parse(raw);
-      if (!j || typeof j !== 'object' || j.version !== 1) return fallback;
+
+      if (
+        !j ||
+        typeof j !== 'object' ||
+        j.version !== 1
+      ) {
+        return fallback;
+      }
+
       return j;
-    } catch (e) { return fallback; }
+    } catch (e) {
+      return fallback;
+    }
   }
-  function writeStore(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+
+  function writeStore(key, val) {
+    try {
+      localStorage.setItem(
+        key,
+        JSON.stringify(val)
+      );
+    } catch (e) {}
+  }
 
   function sanitizeCartItems() {
-    if (!Array.isArray(cart.items)) cart.items = [];
+    if (!Array.isArray(cart.items)) {
+      cart.items = [];
+    }
+
     cart.items = cart.items.filter(function (it) {
-      return it && typeof it.id === 'string' && (it.type === 'deal' || it.type === 'product') &&
-        validNumber(it.qty) && validNumber(it.unitPrice);
+      return (
+        it &&
+        typeof it.id === 'string' &&
+        (it.type === 'deal' || it.type === 'product') &&
+        validNumber(it.qty) &&
+        validNumber(it.unitPrice)
+      );
     });
   }
-  var cart = readStore(CART_KEY, { version: 1, items: [] });
-  var favs = readStore(FAV_KEY, { version: 1, ids: [] });
+
+  var cart = readStore(
+    CART_KEY,
+    {
+      version: 1,
+      items: []
+    }
+  );
+
+  var favs = readStore(
+    FAV_KEY,
+    {
+      version: 1,
+      ids: []
+    }
+  );
+
   sanitizeCartItems();
-  if (!Array.isArray(favs.ids)) favs.ids = [];
-  favs.ids = favs.ids.filter(function (id) { return typeof id === 'string'; });
+
+  if (!Array.isArray(favs.ids)) {
+    favs.ids = [];
+  }
+
+  favs.ids = favs.ids.filter(function (id) {
+    return typeof id === 'string';
+  });
+
+  /*
+   * =========================================================
+   * CART PRICE SYNCHRONIZATION
+   * =========================================================
+   *
+   * The cart keeps unitPrice as an offline fallback, but when
+   * the current catalog is available, menu.json / deals.json
+   * becomes the source of truth.
+   *
+   * This means changing a price in JSON automatically updates
+   * an already-existing cart item on the next catalog load.
+   *
+   * For sized products, the customer's existing sizeId is
+   * preserved and its current JSON price is used.
+   */
+
+  function syncCartPricesWithCatalog() {
+    if (
+      !Array.isArray(cart.items) ||
+      !PG.menu ||
+      !PG.deals
+    ) {
+      return false;
+    }
+
+    var changed = false;
+
+    cart.items.forEach(function (it) {
+      var entry = it.type === 'deal'
+        ? PG.dealById(it.id)
+        : PG.productById(it.id);
+
+      /*
+       * If the product/deal no longer exists or is unavailable,
+       * leave the saved cart price untouched. Other existing
+       * cart behavior can handle the unavailable item.
+       */
+      if (!entry || entry.availability === false) {
+        return;
+      }
+
+      var currentPrice = null;
+
+      /*
+       * Deals use their current deal price.
+       */
+      if (it.type === 'deal') {
+        if (validNumber(entry.price)) {
+          currentPrice = entry.price;
+        }
+      }
+
+      /*
+       * Regular products can have either one price or multiple
+       * size-specific prices.
+       */
+      else {
+        var info = PG.priceInfo(entry);
+
+        /*
+         * Single-price product.
+         */
+        if (info.kind === 'single') {
+          currentPrice = info.price;
+        }
+
+        /*
+         * Sized product.
+         *
+         * IMPORTANT:
+         * Use the size already selected in the cart.
+         * Do not switch to the default size.
+         */
+        else if (info.kind === 'sized') {
+          var selectedSize = null;
+
+          for (var i = 0; i < info.sizes.length; i++) {
+            if (info.sizes[i].id === it.sizeId) {
+              selectedSize = info.sizes[i];
+              break;
+            }
+          }
+
+          if (
+            selectedSize &&
+            validNumber(selectedSize.price)
+          ) {
+            currentPrice = selectedSize.price;
+          }
+        }
+      }
+
+      /*
+       * Current JSON price becomes authoritative whenever
+       * a valid current price was found.
+       */
+      if (
+        validNumber(currentPrice) &&
+        it.unitPrice !== currentPrice
+      ) {
+        it.unitPrice = currentPrice;
+        changed = true;
+      }
+    });
+
+    /*
+     * Save only when something actually changed.
+     * This preserves the existing localStorage behavior.
+     */
+    if (changed) {
+      saveCart(true);
+    }
+
+    return changed;
+  }
 
   PG.cartCount = function () {
     var n = 0;
-    cart.items.forEach(function (it) { n += Math.min(99, Math.max(1, Math.floor(it.qty))); });
+
+    cart.items.forEach(function (it) {
+      n += Math.min(
+        99,
+        Math.max(
+          1,
+          Math.floor(it.qty)
+        )
+      );
+    });
+
     return n;
   };
-  PG.cartItems = function () { return cart.items; };
+
+  PG.cartItems = function () {
+    /*
+     * If the catalog is already loaded, synchronize prices before
+     * returning the cart items.
+     */
+    if (PG.menu && PG.deals) {
+      syncCartPricesWithCatalog();
+    }
+
+    return cart.items;
+  };
+
   function saveCart(silent) {
     writeStore(CART_KEY, cart);
     updateBadges();
-    if (!silent) emit('pg:cart', { items: cart.items });
+
+    if (!silent) {
+      emit('pg:cart', {
+        items: cart.items
+      });
+    }
   }
+
   PG.setQty = function (index, qty) {
     var it = cart.items[index];
+
     if (!it) return;
-    qty = Math.max(1, Math.min(99, Math.floor(qty) || 1));
-    it.qty = qty; saveCart();
+
+    qty = Math.max(
+      1,
+      Math.min(
+        99,
+        Math.floor(qty) || 1
+      )
+    );
+
+    it.qty = qty;
+
+    saveCart();
   };
-  PG.removeLine = function (index) { if (cart.items[index]) { cart.items.splice(index, 1); saveCart(); } };
-  PG.clearCart = function () { cart.items = []; saveCart(); };
+
+  PG.removeLine = function (index) {
+    if (cart.items[index]) {
+      cart.items.splice(index, 1);
+      saveCart();
+    }
+  };
+
+  PG.clearCart = function () {
+    cart.items = [];
+    saveCart();
+  };
 
   PG.addToCart = function (id, opts) {
     opts = opts || {};
-    var type = opts.type === 'deal' ? 'deal' : 'product';
-    var entry = type === 'deal' ? PG.dealById(id) : PG.productById(id);
-    if (!entry) { PG.toast('Sorry, that item no longer exists.'); return false; }
-    if (entry.availability === false) { PG.toast('That item is currently unavailable.'); return false; }
-    var sizeId = null, unitPrice = null, label = entry.name;
+
+    var type = opts.type === 'deal'
+      ? 'deal'
+      : 'product';
+
+    var entry = type === 'deal'
+      ? PG.dealById(id)
+      : PG.productById(id);
+
+    if (!entry) {
+      PG.toast(
+        'Sorry, that item no longer exists.'
+      );
+      return false;
+    }
+
+    if (entry.availability === false) {
+      PG.toast(
+        'That item is currently unavailable.'
+      );
+      return false;
+    }
+
+    var sizeId = null;
+    var unitPrice = null;
+    var label = entry.name;
+
     if (type === 'deal') {
-      if (!validNumber(entry.price)) { PG.toast('That deal has no valid price.'); return false; }
+      if (!validNumber(entry.price)) {
+        PG.toast(
+          'That deal has no valid price.'
+        );
+        return false;
+      }
+
       unitPrice = entry.price;
-    } else {
+    }
+
+    else {
       var info = PG.priceInfo(entry);
-      if (info.kind === 'invalid') { PG.toast('That item has no valid price.'); return false; }
-      if (info.kind === 'single') { unitPrice = info.price; }
+
+      if (info.kind === 'invalid') {
+        PG.toast(
+          'That item has no valid price.'
+        );
+        return false;
+      }
+
+      if (info.kind === 'single') {
+        unitPrice = info.price;
+      }
+
       else {
-        var want = opts.sizeId || (info.def && info.def.id);
-        var match = null, i;
-        for (i = 0; i < info.sizes.length; i++) if (info.sizes[i].id === want) match = info.sizes[i];
-        if (!match) return false; // no size selected: nothing added
-        sizeId = match.id; unitPrice = match.price;
-        label = entry.name + ' (' + match.name + ')';
+        var want = opts.sizeId ||
+          (info.def && info.def.id);
+
+        var match = null;
+        var i;
+
+        for (i = 0; i < info.sizes.length; i++) {
+          if (info.sizes[i].id === want) {
+            match = info.sizes[i];
+          }
+        }
+
+        if (!match) return false;
+
+        sizeId = match.id;
+        unitPrice = match.price;
+
+        label =
+          entry.name +
+          ' (' +
+          match.name +
+          ')';
       }
     }
-    var merged = false, i;
+
+    var merged = false;
+    var i;
+
     for (i = 0; i < cart.items.length; i++) {
       var it = cart.items[i];
-      if (it.id === id && it.type === type && (it.sizeId || null) === (sizeId || null)) {
-        it.qty = Math.min(99, it.qty + 1); merged = true; break; // keep earliest price snapshot
+
+      if (
+        it.id === id &&
+        it.type === type &&
+        (it.sizeId || null) ===
+          (sizeId || null)
+      ) {
+        it.qty = Math.min(
+          99,
+          it.qty + 1
+        );
+
+        /*
+         * When adding an existing line again, use the current
+         * JSON price instead of preserving an old snapshot.
+         */
+        it.unitPrice = unitPrice;
+
+        merged = true;
+        break;
       }
     }
-    if (!merged) cart.items.push({ id: id, type: type, sizeId: sizeId, qty: 1, unitPrice: unitPrice });
+
+    if (!merged) {
+      cart.items.push({
+        id: id,
+        type: type,
+        sizeId: sizeId,
+        qty: 1,
+        unitPrice: unitPrice
+      });
+    }
+
     saveCart();
-    PG.toast('Added: ' + label, { label: 'View Cart', href: 'cart.html' });
+
+    PG.toast(
+      'Added: ' + label,
+      {
+        label: 'View Cart',
+        href: 'cart.html'
+      }
+    );
+
     return true;
   };
 
-  PG.isFav = function (id) { return favs.ids.indexOf(id) !== -1; };
+  PG.isFav = function (id) {
+    return favs.ids.indexOf(id) !== -1;
+  };
+
   PG.toggleFav = function (id) {
     var p = PG.productById(id);
+
     if (!p) return false;
+
     var i = favs.ids.indexOf(id);
-    if (i === -1) { favs.ids.push(id); PG.toast('Saved to favorites.'); }
-    else { favs.ids.splice(i, 1); PG.toast('Removed from favorites.'); }
+
+    if (i === -1) {
+      favs.ids.push(id);
+      PG.toast('Saved to favorites.');
+    }
+
+    else {
+      favs.ids.splice(i, 1);
+      PG.toast('Removed from favorites.');
+    }
+
     writeStore(FAV_KEY, favs);
-    refreshFavButtons(); emit('pg:favorites', { ids: favs.ids });
+
+    refreshFavButtons();
+
+    emit('pg:favorites', {
+      ids: favs.ids
+    });
+
     return true;
   };
+
   function pruneFavorites() {
     if (!PG.menu) return;
+
     var before = favs.ids.length;
-    favs.ids = favs.ids.filter(function (id) { return !!PG.productById(id); });
-    if (favs.ids.length !== before) writeStore(FAV_KEY, favs);
+
+    favs.ids = favs.ids.filter(function (id) {
+      return !!PG.productById(id);
+    });
+
+    if (favs.ids.length !== before) {
+      writeStore(FAV_KEY, favs);
+    }
   }
 
   /* -------- totals -------- */
+
   PG.totals = function () {
-    var sub = 0, i;
-    for (i = 0; i < cart.items.length; i++) sub += cart.items[i].qty * cart.items[i].unitPrice;
-    return { subtotal: sub, delivery: null, total: sub }; // rule-only mode: Subtotal = Total
+    /*
+     * Always synchronize with the current catalog whenever it
+     * is available before calculating totals.
+     */
+    if (PG.menu && PG.deals) {
+      syncCartPricesWithCatalog();
+    }
+
+    var sub = 0;
+    var i;
+
+    for (i = 0; i < cart.items.length; i++) {
+      sub +=
+        cart.items[i].qty *
+        cart.items[i].unitPrice;
+    }
+
+    return {
+      subtotal: sub,
+      delivery: null,
+      total: sub
+    }; // rule-only mode: Subtotal = Total
   };
 
   /* -------- WhatsApp -------- */
-  PG.waDigits = function (intl) { return String(intl || '').replace(/\D/g, ''); };
-  PG.waOrderLink = function (message) {
-    return 'https://wa.me/' + PG.waDigits(PG.settings.whatsappPrimaryIntl) + '?text=' + encodeURIComponent(message || 'Assalam-o-Alaikum! I would like to place an order.');
+
+  PG.waDigits = function (intl) {
+    return String(intl || '').replace(
+      /\D/g,
+      ''
+    );
   };
+
+  PG.waOrderLink = function (message) {
+    return (
+      'https://wa.me/' +
+      PG.waDigits(
+        PG.settings.whatsappPrimaryIntl
+      ) +
+      '?text=' +
+      encodeURIComponent(
+        message ||
+        'Assalam-o-Alaikum! I would like to place an order.'
+      )
+    );
+  };
+
   function fill(fmt, map) {
-    return String(fmt).replace(/\{(\w+)\}/g, function (m, k) { return (k in map) ? map[k] : m; });
+    return String(fmt).replace(
+      /\{(\w+)\}/g,
+      function (m, k) {
+        return (
+          k in map
+            ? map[k]
+            : m
+        );
+      }
+    );
   }
+
   PG.buildOrderMessage = function (customer) {
-    var T = PG.waTemplate, del = PG.settings.delivery, c = customer || {};
+    var T = PG.waTemplate;
+    var del = PG.settings.delivery;
+    var c = customer || {};
+
+    /*
+     * Make sure WhatsApp uses the latest catalog price too.
+     */
+    if (PG.menu && PG.deals) {
+      syncCartPricesWithCatalog();
+    }
+
     var itemLines = cart.items.map(function (it) {
-      var name = it.id, sizeSuffix = '';
-      if (it.type === 'deal') { var d = PG.dealById(it.id); if (d) name = d.name; }
-      else {
-        var p = PG.productById(it.id);
-        if (p) {
-          name = p.name;
-          if (it.sizeId) { var sn = PG.sizeName(p, it.sizeId); if (sn) sizeSuffix = ' (' + sn + ')'; }
+      var name = it.id;
+      var sizeSuffix = '';
+
+      if (it.type === 'deal') {
+        var d = PG.dealById(it.id);
+
+        if (d) {
+          name = d.name;
         }
       }
-      return fill(T.itemLineFormat, {
-        productName: name, sizeSuffix: sizeSuffix, quantity: it.qty, lineTotal: PG.fmtNum(it.qty * it.unitPrice)
-      });
+
+      else {
+        var p = PG.productById(it.id);
+
+        if (p) {
+          name = p.name;
+
+          if (it.sizeId) {
+            var sn = PG.sizeName(
+              p,
+              it.sizeId
+            );
+
+            if (sn) {
+              sizeSuffix =
+                ' (' +
+                sn +
+                ')';
+            }
+          }
+        }
+      }
+
+      return fill(
+        T.itemLineFormat,
+        {
+          productName: name,
+          sizeSuffix: sizeSuffix,
+          quantity: it.qty,
+          lineTotal: PG.fmtNum(
+            it.qty *
+            it.unitPrice
+          )
+        }
+      );
     });
+
     var note = (c.note || '').trim();
-    var deliveryNote = fill(T.deliveryNoteFormat, { freeText: del.freeText, beyondShort: del.beyondShort });
+
+    var deliveryNote = fill(
+      T.deliveryNoteFormat,
+      {
+        freeText: del.freeText,
+        beyondShort: del.beyondShort
+      }
+    );
+
     var msg = [
-      T.header, T.divider, '', '',
+      T.header,
+      T.divider,
+      '',
+      '',
+
       T.customerSectionTitle,
-      fill(T.nameLineFormat, { customerName: c.name }),
-      fill(T.phoneLineFormat, { phone: c.phone }),
-      fill(T.addressLineFormat, { address: c.address })
+
+      fill(
+        T.nameLineFormat,
+        {
+          customerName: c.name
+        }
+      ),
+
+      fill(
+        T.phoneLineFormat,
+        {
+          phone: c.phone
+        }
+      ),
+
+      fill(
+        T.addressLineFormat,
+        {
+          address: c.address
+        }
+      )
     ];
-    if (note) msg.push(fill(T.notesLineFormat, { note: note }));
-    msg.push('', '', T.divider, T.orderSectionTitle, itemLines.join('\n'), '', '',
-      T.divider, T.paymentSectionTitle,
-      fill(T.totalLineFormat, { total: PG.fmtNum(PG.totals().total) }),
-      fill(T.deliveryLineFormat, { deliveryNote: deliveryNote }),
-      '', '', T.divider, T.footerLine);
+
+    if (note) {
+      msg.push(
+        fill(
+          T.notesLineFormat,
+          {
+            note: note
+          }
+        )
+      );
+    }
+
+    msg.push(
+      '',
+      '',
+      T.divider,
+      T.orderSectionTitle,
+      itemLines.join('\n'),
+      '',
+      '',
+      T.divider,
+      T.paymentSectionTitle,
+
+      fill(
+        T.totalLineFormat,
+        {
+          total: PG.fmtNum(
+            PG.totals().total
+          )
+        }
+      ),
+
+      fill(
+        T.deliveryLineFormat,
+        {
+          deliveryNote: deliveryNote
+        }
+      ),
+
+      '',
+      '',
+      T.divider,
+      T.footerLine
+    );
+
     return msg.join('\n');
   };
+
   PG.validPhone = function (raw) {
-    var digits = String(raw || '').replace(/\D/g, '');
-    if (/^92/.test(digits)) digits = digits.slice(2);
-    if (/^0/.test(digits)) digits = digits.slice(1);
+    var digits = String(raw || '').replace(
+      /\D/g,
+      ''
+    );
+
+    if (/^92/.test(digits)) {
+      digits = digits.slice(2);
+    }
+
+    if (/^0/.test(digits)) {
+      digits = digits.slice(1);
+    }
+
     return /^3\d{9}$/.test(digits);
   };
 
   /* ================= Badges & fav buttons ================= */
+
   function updateBadges() {
     var n = PG.cartCount();
-    document.querySelectorAll('[data-cart-badge]').forEach(function (b) {
-      b.textContent = n > 99 ? '99+' : String(n);
-      if (n <= 0) b.setAttribute('hidden', ''); else b.removeAttribute('hidden');
+
+    document.querySelectorAll(
+      '[data-cart-badge]'
+    ).forEach(function (b) {
+      b.textContent =
+        n > 99
+          ? '99+'
+          : String(n);
+
+      if (n <= 0) {
+        b.setAttribute(
+          'hidden',
+          ''
+        );
+      }
+
+      else {
+        b.removeAttribute(
+          'hidden'
+        );
+      }
     });
   }
+
   function refreshFavButtons() {
-    document.querySelectorAll('[data-fav]').forEach(function (b) {
-      var active = PG.isFav(b.getAttribute('data-fav'));
-      b.setAttribute('aria-pressed', active ? 'true' : 'false');
-      b.innerHTML = icon(active ? 'heart-filled' : 'heart');
-      b.setAttribute('aria-label', active ? 'Remove from favorites' : 'Save to favorites');
+    document.querySelectorAll(
+      '[data-fav]'
+    ).forEach(function (b) {
+      var active = PG.isFav(
+        b.getAttribute('data-fav')
+      );
+
+      b.setAttribute(
+        'aria-pressed',
+        active ? 'true' : 'false'
+      );
+
+      b.innerHTML = icon(
+        active
+          ? 'heart-filled'
+          : 'heart'
+      );
+
+      b.setAttribute(
+        'aria-label',
+        active
+          ? 'Remove from favorites'
+          : 'Save to favorites'
+      );
     });
   }
-  PG.updateBadges = updateBadges; PG.refreshFavButtons = refreshFavButtons;
+
+  PG.updateBadges = updateBadges;
+  PG.refreshFavButtons = refreshFavButtons;
 
   /* ================= Toasts ================= */
+
   PG.toast = function (msg, action) {
-    var root = document.querySelector('.toast-root');
+    var root = document.querySelector(
+      '.toast-root'
+    );
+
     if (!root) return;
-    while (root.children.length >= 2) root.removeChild(root.firstChild);
-    var el = document.createElement('div');
-    el.className = 'toast'; el.setAttribute('role', 'status');
-    var span = document.createElement('span'); span.textContent = msg; el.appendChild(span);
-    if (action && action.label && action.href) {
-      var a = document.createElement('a'); a.href = action.href; a.textContent = action.label; el.appendChild(a);
+
+    while (root.children.length >= 2) {
+      root.removeChild(
+        root.firstChild
+      );
     }
+
+    var el = document.createElement('div');
+
+    el.className = 'toast';
+    el.setAttribute(
+      'role',
+      'status'
+    );
+
+    var span = document.createElement(
+      'span'
+    );
+
+    span.textContent = msg;
+    el.appendChild(span);
+
+    if (
+      action &&
+      action.label &&
+      action.href
+    ) {
+      var a = document.createElement(
+        'a'
+      );
+
+      a.href = action.href;
+      a.textContent = action.label;
+
+      el.appendChild(a);
+    }
+
     root.appendChild(el);
-    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 3000);
+
+    setTimeout(function () {
+      if (el.parentNode) {
+        el.parentNode.removeChild(el);
+      }
+    }, 3000);
   };
 
   /* ================= Cards ================= */
+
   PG.productCard = function (p, opts) {
     opts = opts || {};
+
     var info = PG.priceInfo(p);
     var unav = p.availability === false;
     var noPrice = info.kind === 'invalid';
     var disabled = unav || noPrice;
-    var priceHtml = unav ? '<p class="card-price">' + esc(PG.priceLabel(p) === 'Price unavailable' ? 'Price unavailable' : PG.priceLabel(p)) + '</p>'
-      : (noPrice ? '<p class="card-price">Price unavailable</p>'
-        : '<p class="card-price">' + esc(PG.priceLabel(p)) + '</p>');
-    var cta = info.kind === 'sized' ? 'Select Size' : 'Add to Cart';
-    return '<article class="card product-card' + (unav ? ' unavailable' : '') + '" data-product="' + esc(p.id) + '">' +
+
+    var priceHtml =
+      unav
+        ? '<p class="card-price">' +
+          esc(
+            PG.priceLabel(p) ===
+              'Price unavailable'
+              ? 'Price unavailable'
+              : PG.priceLabel(p)
+          ) +
+          '</p>'
+
+        : (
+            noPrice
+              ? '<p class="card-price">Price unavailable</p>'
+              : '<p class="card-price">' +
+                esc(
+                  PG.priceLabel(p)
+                ) +
+                '</p>'
+          );
+
+    var cta =
+      info.kind === 'sized'
+        ? 'Select Size'
+        : 'Add to Cart';
+
+    return (
+      '<article class="card product-card' +
+      (unav ? ' unavailable' : '') +
+      '" data-product="' +
+      esc(p.id) +
+      '">' +
+
       '<div class="card-media">' +
-      (opts.badge ? '<span class="badge badge-gold">' + esc(opts.badge) + '</span>' : '') +
-      '<img src="' + esc(p.image || '') + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">' +
-      '<button class="fav-btn" data-fav="' + esc(p.id) + '" aria-pressed="' + (PG.isFav(p.id) ? 'true' : 'false') +
-      '" aria-label="Save to favorites">' + icon(PG.isFav(p.id) ? 'heart-filled' : 'heart') + '</button>' +
-      (unav ? '<span class="unavail-chip">Currently unavailable</span>' : '') +
-      '</div><div class="card-body"><h3>' + esc(p.name) + '</h3>' + priceHtml +
-      '<button class="btn btn-primary btn-block add-btn" data-add="' + esc(p.id) + '" data-type="product"' +
-      (disabled ? ' disabled aria-disabled="true"' : '') + '>' + icon('cart') + '<span>' + cta + '</span></button>' +
-      '</div></article>';
+
+      (
+        opts.badge
+          ? '<span class="badge badge-gold">' +
+            esc(opts.badge) +
+            '</span>'
+          : ''
+      ) +
+
+      '<img src="' +
+      esc(p.image || '') +
+      '" alt="' +
+      esc(p.name) +
+      '" loading="lazy" decoding="async">' +
+
+      '<button class="fav-btn" data-fav="' +
+      esc(p.id) +
+      '" aria-pressed="' +
+      (
+        PG.isFav(p.id)
+          ? 'true'
+          : 'false'
+      ) +
+      '" aria-label="Save from favorites">' +
+
+      icon(
+        PG.isFav(p.id)
+          ? 'heart-filled'
+          : 'heart'
+      ) +
+
+      '</button>' +
+
+      (
+        unav
+          ? '<span class="unavail-chip">Currently unavailable</span>'
+          : ''
+      ) +
+
+      '</div>' +
+
+      '<div class="card-body">' +
+
+      '<h3>' +
+      esc(p.name) +
+      '</h3>' +
+
+      priceHtml +
+
+      '<button class="btn btn-primary btn-block add-btn" data-add="' +
+      esc(p.id) +
+      '" data-type="product"' +
+
+      (
+        disabled
+          ? ' disabled aria-disabled="true"'
+          : ''
+      ) +
+
+      '>' +
+
+      icon('cart') +
+
+      '<span>' +
+      cta +
+      '</span>' +
+
+      '</button>' +
+
+      '</div>' +
+
+      '</article>'
+    );
   };
+
   PG.dealCard = function (d) {
     var unav = d.availability === false;
     var noPrice = !validNumber(d.price);
-    var badgeCls = (d.badge && d.badge.color === 'red') ? 'badge-red' : 'badge-gold';
-    var priceHtml = noPrice ? '<p class="card-price">Price unavailable</p>'
-      : '<p class="card-price"><strong>' + esc(PG.fmtPKR(d.price)) + '</strong>' +
-        (validNumber(d.originalPrice) && d.originalPrice > d.price ? '<s>' + esc(PG.fmtPKR(d.originalPrice)) + '</s>' : '') + '</p>';
-    return '<article class="card deal-card' + (unav ? ' unavailable' : '') + '" data-deal="' + esc(d.id) + '">' +
+
+    var badgeCls =
+      (
+        d.badge &&
+        d.badge.color === 'red'
+      )
+        ? 'badge-red'
+        : 'badge-gold';
+
+    var priceHtml =
+      noPrice
+        ? '<p class="card-price">Price unavailable</p>'
+        : '<p class="card-price"><strong>' +
+          esc(
+            PG.fmtPKR(d.price)
+          ) +
+          '</strong>' +
+
+          (
+            validNumber(d.originalPrice) &&
+            d.originalPrice > d.price
+              ? '<s>' +
+                esc(
+                  PG.fmtPKR(
+                    d.originalPrice
+                  )
+                ) +
+                '</s>'
+              : ''
+          ) +
+
+          '</p>';
+
+    return (
+      '<article class="card deal-card' +
+      (unav ? ' unavailable' : '') +
+      '" data-deal="' +
+      esc(d.id) +
+      '">' +
+
       '<div class="card-media">' +
-      (d.badge && d.badge.text ? '<span class="badge ' + badgeCls + '">' + esc(d.badge.text) + '</span>' : '') +
-      '<img src="' + esc(d.image || '') + '" alt="' + esc(d.name) + '" loading="lazy" decoding="async">' +
-      (unav ? '<span class="unavail-chip">Currently unavailable</span>' : '') +
-      '</div><div class="card-body"><h3>' + esc(d.name) + '</h3>' +
-      (d.contents ? '<p class="card-desc">' + esc(d.contents) + '</p>' : '') + priceHtml +
-      '<button class="btn btn-primary btn-block add-btn" data-add="' + esc(d.id) + '" data-type="deal"' +
-      ((unav || noPrice) ? ' disabled aria-disabled="true"' : '') + '>' + icon('cart') + '<span>Add to Cart</span></button>' +
-      '</div></article>';
+
+      (
+        d.badge &&
+        d.badge.text
+          ? '<span class="badge ' +
+            badgeCls +
+            '">' +
+            esc(d.badge.text) +
+            '</span>'
+          : ''
+      ) +
+
+      '<img src="' +
+      esc(d.image || '') +
+      '" alt="' +
+      esc(d.name) +
+      '" loading="lazy" decoding="async">' +
+
+      (
+        unav
+          ? '<span class="unavail-chip">Currently unavailable</span>'
+          : ''
+      ) +
+
+      '</div>' +
+
+      '<div class="card-body">' +
+
+      '<h3>' +
+      esc(d.name) +
+      '</h3>' +
+
+      (
+        d.contents
+          ? '<p class="card-desc">' +
+            esc(d.contents) +
+            '</p>'
+          : ''
+      ) +
+
+      priceHtml +
+
+      '<button class="btn btn-primary btn-block add-btn" data-add="' +
+      esc(d.id) +
+      '" data-type="deal"' +
+
+      (
+        unav || noPrice
+          ? ' disabled aria-disabled="true"'
+          : ''
+      ) +
+
+      '>' +
+
+      icon('cart') +
+
+      '<span>Add to Cart</span>' +
+
+      '</button>' +
+
+      '</div>' +
+
+      '</article>'
+    );
   };
 
   /* ================= Modal + size selector ================= */
+
   var lastFocus = null;
-  var sizeSelId = null, sizeSelVal = null; // pending size selection (single delegated listener)
+  var sizeSelId = null;
+  var sizeSelVal = null;
+
   function trapFocus(container) {
     function handler(e) {
       if (e.key !== 'Tab') return;
-      var f = container.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
-      f = Array.prototype.filter.call(f, function (el) { return !el.disabled && el.offsetParent !== null; });
+
+      var f = container.querySelectorAll(
+        'button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])'
+      );
+
+      f = Array.prototype.filter.call(
+        f,
+        function (el) {
+          return (
+            !el.disabled &&
+            el.offsetParent !== null
+          );
+        }
+      );
+
       if (!f.length) return;
-      var first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+
+      var first = f[0];
+      var last = f[f.length - 1];
+
+      if (
+        e.shiftKey &&
+        document.activeElement === first
+      ) {
+        e.preventDefault();
+        last.focus();
+      }
+
+      else if (
+        !e.shiftKey &&
+        document.activeElement === last
+      ) {
+        e.preventDefault();
+        first.focus();
+      }
     }
-    container.addEventListener('keydown', handler);
-    return function () { container.removeEventListener('keydown', handler); };
+
+    container.addEventListener(
+      'keydown',
+      handler
+    );
+
+    return function () {
+      container.removeEventListener(
+        'keydown',
+        handler
+      );
+    };
   }
+
   PG.openModal = function (html, opts) {
     opts = opts || {};
+
     lastFocus = document.activeElement;
-    var back = document.querySelector('.modal-backdrop');
-    var box = back.querySelector('.modal');
-    box.innerHTML = '<div class="modal-wrap"><button class="icon-btn modal-close" data-modal-close aria-label="Close">' + icon('x') + '</button>' + html + '</div>';
+
+    var back = document.querySelector(
+      '.modal-backdrop'
+    );
+
+    var box = back.querySelector(
+      '.modal'
+    );
+
+    box.innerHTML =
+      '<div class="modal-wrap">' +
+      '<button class="icon-btn modal-close" data-modal-close aria-label="Close">' +
+      icon('x') +
+      '</button>' +
+      html +
+      '</div>';
+
     back.classList.add('open');
-    document.body.style.overflow = 'hidden';
+
+    document.body.style.overflow =
+      'hidden';
+
     var release = trapFocus(box);
+
     back._release = release;
-    back._onEsc = function (e) { if (e.key === 'Escape') PG.closeModal(); };
-    document.addEventListener('keydown', back._onEsc);
-    var first = box.querySelector('[data-autofocus]') || box.querySelector('button:not(.modal-close),input');
-    if (first) first.focus();
+
+    back._onEsc = function (e) {
+      if (e.key === 'Escape') {
+        PG.closeModal();
+      }
+    };
+
+    document.addEventListener(
+      'keydown',
+      back._onEsc
+    );
+
+    var first =
+      box.querySelector(
+        '[data-autofocus]'
+      ) ||
+      box.querySelector(
+        'button:not(.modal-close),input'
+      );
+
+    if (first) {
+      first.focus();
+    }
   };
+
   PG.closeModal = function () {
-    var back = document.querySelector('.modal-backdrop');
-    if (!back || !back.classList.contains('open')) return;
+    var back = document.querySelector(
+      '.modal-backdrop'
+    );
+
+    if (
+      !back ||
+      !back.classList.contains('open')
+    ) {
+      return;
+    }
+
     back.classList.remove('open');
+
     document.body.style.overflow = '';
-    if (back._release) back._release();
-    if (back._onEsc) document.removeEventListener('keydown', back._onEsc);
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
+
+    if (back._release) {
+      back._release();
+    }
+
+    if (back._onEsc) {
+      document.removeEventListener(
+        'keydown',
+        back._onEsc
+      );
+    }
+
+    if (
+      lastFocus &&
+      lastFocus.focus
+    ) {
+      lastFocus.focus();
+    }
   };
+
   PG.openSizeSelector = function (id) {
     var p = PG.productById(id);
+
     if (!p) return;
+
     var info = PG.priceInfo(p);
-    if (info.kind !== 'sized') { PG.addToCart(id, { type: 'product' }); return; }
-    if (info.sizes.length < 2) { PG.addToCart(id, { type: 'product', sizeId: info.sizes[0].id }); return; }
+
+    if (info.kind !== 'sized') {
+      PG.addToCart(
+        id,
+        {
+          type: 'product'
+        }
+      );
+
+      return;
+    }
+
+    if (info.sizes.length < 2) {
+      PG.addToCart(
+        id,
+        {
+          type: 'product',
+          sizeId: info.sizes[0].id
+        }
+      );
+
+      return;
+    }
+
     var defId = info.def.id;
-    var opts = info.sizes.map(function (s, i) {
-      return '<button class="size-opt" role="radio" aria-checked="' + (s.id === defId ? 'true' : 'false') + '" data-size="' + esc(s.id) + '"' +
-        (i === 0 ? ' data-autofocus' : '') + '><strong>' + esc(s.name) + '</strong><span class="size-price">' + esc(PG.fmtPKR(s.price)) + '</span></button>';
-    }).join('');
-    PG.openModal('<h2>' + esc(p.name) + '</h2><p class="modal-sub">Choose a size</p>' +
-      '<div role="radiogroup" aria-label="Choose a size">' + opts + '</div>' +
-      '<div class="modal-actions"><button class="btn btn-outline" data-modal-close>Cancel</button>' +
-      '<button class="btn btn-primary" data-size-confirm>Add to Cart</button></div>');
-    sizeSelId = id; sizeSelVal = defId; // handled by the single global delegated listener
+
+    var opts = info.sizes.map(
+      function (s, i) {
+        return (
+          '<button class="size-opt" role="radio" aria-checked="' +
+          (
+            s.id === defId
+              ? 'true'
+              : 'false'
+          ) +
+          '" data-size="' +
+          esc(s.id) +
+          '"' +
+
+          (
+            i === 0
+              ? ' data-autofocus'
+              : ''
+          ) +
+
+          '>' +
+
+          '<strong>' +
+          esc(s.name) +
+          '</strong>' +
+
+          '<span class="size-price">' +
+          esc(
+            PG.fmtPKR(s.price)
+          ) +
+          '</span>' +
+
+          '</button>'
+        );
+      }
+    ).join('');
+
+    PG.openModal(
+      '<h2>' +
+      esc(p.name) +
+      '</h2>' +
+
+      '<p class="modal-sub">Choose a size</p>' +
+
+      '<div role="radiogroup" aria-label="Choose a size">' +
+      opts +
+      '</div>' +
+
+      '<div class="modal-actions">' +
+
+      '<button class="btn btn-outline" data-modal-close>' +
+      'Cancel' +
+      '</button>' +
+
+      '<button class="btn btn-primary" data-size-confirm>' +
+      'Add to Cart' +
+      '</button>' +
+
+      '</div>'
+    );
+
+    sizeSelId = id;
+    sizeSelVal = defId;
   };
 
   /* ================= Drawer ================= */
+
   PG.openDrawer = function () {
     lastFocus = document.activeElement;
-    document.body.classList.add('drawer-open');
-    var dr = document.getElementById('drawer');
+
+    document.body.classList.add(
+      'drawer-open'
+    );
+
+    var dr = document.getElementById(
+      'drawer'
+    );
+
     dr._release = trapFocus(dr);
-    dr._onEsc = function (e) { if (e.key === 'Escape') PG.closeDrawer(); };
-    document.addEventListener('keydown', dr._onEsc);
-    var c = dr.querySelector('[data-drawer-close]'); if (c) c.focus();
+
+    dr._onEsc = function (e) {
+      if (e.key === 'Escape') {
+        PG.closeDrawer();
+      }
+    };
+
+    document.addEventListener(
+      'keydown',
+      dr._onEsc
+    );
+
+    var c = dr.querySelector(
+      '[data-drawer-close]'
+    );
+
+    if (c) c.focus();
   };
+
   PG.closeDrawer = function () {
-    if (!document.body.classList.contains('drawer-open')) return;
-    document.body.classList.remove('drawer-open');
-    var dr = document.getElementById('drawer');
-    if (dr._release) dr._release();
-    if (dr._onEsc) document.removeEventListener('keydown', dr._onEsc);
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    if (
+      !document.body.classList.contains(
+        'drawer-open'
+      )
+    ) {
+      return;
+    }
+
+    document.body.classList.remove(
+      'drawer-open'
+    );
+
+    var dr = document.getElementById(
+      'drawer'
+    );
+
+    if (dr._release) {
+      dr._release();
+    }
+
+    if (dr._onEsc) {
+      document.removeEventListener(
+        'keydown',
+        dr._onEsc
+      );
+    }
+
+    if (
+      lastFocus &&
+      lastFocus.focus
+    ) {
+      lastFocus.focus();
+    }
   };
 
   PG.getManifest = function () {
-    var b = (PG.settings && PG.settings.branding) || {};
-    var name = b.brandName || '', tag = b.brandTagline || '';
+    var b =
+      (PG.settings &&
+        PG.settings.branding) ||
+      {};
+
+    var name =
+      b.brandName || '';
+
+    var tag =
+      b.brandTagline || '';
+
     return {
-      name: tag ? name + ' — ' + tag : name,
+      name: tag
+        ? name + ' — ' + tag
+        : name,
+
       short_name: name,
-      description: 'Browse the menu, order deals, and place your order on WhatsApp.',
-      start_url: 'index.html', scope: './', display: 'standalone',
-      background_color: '#FFFFFF', theme_color: '#E11B23',
+
+      description:
+        'Browse the menu, order deals, and place your order on WhatsApp.',
+
+      start_url: 'index.html',
+      scope: './',
+      display: 'standalone',
+
+      background_color: '#FFFFFF',
+      theme_color: '#E11B23',
+
       icons: [
-        { src: b.icon192 || '', sizes: '192x192', type: 'image/png' },
-        { src: b.icon512 || '', sizes: '512x512', type: 'image/png' },
-        { src: b.iconMaskable || '', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+        {
+          src: b.icon192 || '',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: b.icon512 || '',
+          sizes: '512x512',
+          type: 'image/png'
+        },
+        {
+          src: b.iconMaskable || '',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable'
+        }
       ]
     };
   };
+
   function applyBrandingAssets(branding) {
     if (branding.favicon) {
-      document.querySelectorAll('link[rel="icon"]').forEach(function (el) { el.setAttribute('href', branding.favicon); });
+      document.querySelectorAll(
+        'link[rel="icon"]'
+      ).forEach(function (el) {
+        el.setAttribute(
+          'href',
+          branding.favicon
+        );
+      });
     }
+
     if (branding.appleTouchIcon) {
-      document.querySelectorAll('link[rel="apple-touch-icon"]').forEach(function (el) { el.setAttribute('href', branding.appleTouchIcon); });
+      document.querySelectorAll(
+        'link[rel="apple-touch-icon"]'
+      ).forEach(function (el) {
+        el.setAttribute(
+          'href',
+          branding.appleTouchIcon
+        );
+      });
     }
+
     try {
-      var link = document.querySelector('link[rel="manifest"]');
-      if (link && window.URL && window.URL.createObjectURL) {
-        var blob = new Blob([JSON.stringify(PG.getManifest())], { type: 'application/manifest+json' });
-        link.setAttribute('href', window.URL.createObjectURL(blob));
+      var link = document.querySelector(
+        'link[rel="manifest"]'
+      );
+
+      if (
+        link &&
+        window.URL &&
+        window.URL.createObjectURL
+      ) {
+        var blob = new Blob(
+          [
+            JSON.stringify(
+              PG.getManifest()
+            )
+          ],
+          {
+            type:
+              'application/manifest+json'
+          }
+        );
+
+        link.setAttribute(
+          'href',
+          window.URL.createObjectURL(blob)
+        );
       }
-    } catch (e) { /* static manifest.webmanifest fallback stays in place */ }
+    } catch (e) {
+      /* static manifest.webmanifest fallback stays in place */
+    }
   }
 
   /* ================= Chrome hydration ================= */
+
   function hydrateChrome() {
-    var s = PG.settings, c = PG.contact;
-    var branding = s.branding || {};
-    var brandName = branding.brandName || (s.brand && s.brand.name) || '';
-    var brandTagline = branding.brandTagline || (s.brand && s.brand.tagline) || '';
-    document.querySelectorAll('[data-brand-name]').forEach(function (el) { el.textContent = brandName; });
-    document.querySelectorAll('[data-brand-tagline]').forEach(function (el) { el.textContent = brandTagline; });
-    document.querySelectorAll('[data-brand-logo]').forEach(function (el) {
-      if (branding.logoIcon) el.setAttribute('src', branding.logoIcon);
-      el.setAttribute('alt', brandName + ' logo');
+    var s = PG.settings;
+    var c = PG.contact;
+
+    var branding =
+      s.branding || {};
+
+    var brandName =
+      branding.brandName ||
+      (s.brand && s.brand.name) ||
+      '';
+
+    var brandTagline =
+      branding.brandTagline ||
+      (s.brand && s.brand.tagline) ||
+      '';
+
+    document.querySelectorAll(
+      '[data-brand-name]'
+    ).forEach(function (el) {
+      el.textContent = brandName;
     });
-    document.querySelectorAll('a.brand').forEach(function (el) { el.setAttribute('aria-label', brandName + ' — home'); });
-    applyBrandingAssets(branding);
-    document.querySelectorAll('[data-footer-credit]').forEach(function (el) { el.textContent = s.footerCredit; });
-    document.querySelectorAll('[data-delivery-free]').forEach(function (el) { el.textContent = s.delivery.freeText; });
-    document.querySelectorAll('[data-delivery-beyond]').forEach(function (el) { el.textContent = s.delivery.beyondText; });
-    document.querySelectorAll('[data-address]').forEach(function (el) { el.textContent = c.address; });
-    document.querySelectorAll('[data-wa-order]').forEach(function (el) {
-      el.setAttribute('href', PG.waOrderLink()); el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener');
+
+    document.querySelectorAll(
+      '[data-brand-tagline]'
+    ).forEach(function (el) {
+      el.textContent = brandTagline;
     });
-    document.querySelectorAll('[data-call-link]').forEach(function (el) {
-      if (c.phone) { el.setAttribute('href', 'tel:' + c.phoneIntl.replace(/\s/g, '')); el.style.display = ''; }
-      else el.style.display = 'none';
+
+    document.querySelectorAll(
+      '[data-brand-logo]'
+    ).forEach(function (el) {
+      if (branding.logoIcon) {
+        el.setAttribute(
+          'src',
+          branding.logoIcon
+        );
+      }
+
+      el.setAttribute(
+        'alt',
+        brandName + ' logo'
+      );
     });
-    document.querySelectorAll('[data-phone-text]').forEach(function (el) { el.textContent = c.phone || ''; });
-    document.querySelectorAll('[data-wa-text]').forEach(function (el) { el.textContent = s.whatsappPrimary || ''; });
-    document.querySelectorAll('[data-directions-link]').forEach(function (el) {
-      if (c.mapsUrl) { el.setAttribute('href', c.mapsUrl); el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener'); el.style.display = ''; }
-      else el.style.display = 'none';
+
+    document.querySelectorAll(
+      'a.brand'
+    ).forEach(function (el) {
+      el.setAttribute(
+        'aria-label',
+        brandName + ' — home'
+      );
     });
-    // Socials: render only configured links, else hide row
-    document.querySelectorAll('[data-socials]').forEach(function (row) {
+
+    applyBrandingAssets(
+      branding
+    );
+
+    document.querySelectorAll(
+      '[data-footer-credit]'
+    ).forEach(function (el) {
+      el.textContent =
+        s.footerCredit;
+    });
+
+    document.querySelectorAll(
+      '[data-delivery-free]'
+    ).forEach(function (el) {
+      el.textContent =
+        s.delivery.freeText;
+    });
+
+    document.querySelectorAll(
+      '[data-delivery-beyond]'
+    ).forEach(function (el) {
+      el.textContent =
+        s.delivery.beyondText;
+    });
+
+    document.querySelectorAll(
+      '[data-address]'
+    ).forEach(function (el) {
+      el.textContent =
+        c.address;
+    });
+
+    document.querySelectorAll(
+      '[data-wa-order]'
+    ).forEach(function (el) {
+      el.setAttribute(
+        'href',
+        PG.waOrderLink()
+      );
+
+      el.setAttribute(
+        'target',
+        '_blank'
+      );
+
+      el.setAttribute(
+        'rel',
+        'noopener'
+      );
+    });
+
+    document.querySelectorAll(
+      '[data-call-link]'
+    ).forEach(function (el) {
+      if (c.phone) {
+        el.setAttribute(
+          'href',
+          'tel:' +
+          c.phoneIntl.replace(
+            /\s/g,
+            ''
+          )
+        );
+
+        el.style.display = '';
+      }
+
+      else {
+        el.style.display = 'none';
+      }
+    });
+
+    document.querySelectorAll(
+      '[data-phone-text]'
+    ).forEach(function (el) {
+      el.textContent =
+        c.phone || '';
+    });
+
+    document.querySelectorAll(
+      '[data-wa-text]'
+    ).forEach(function (el) {
+      el.textContent =
+        s.whatsappPrimary || '';
+    });
+
+    document.querySelectorAll(
+      '[data-directions-link]'
+    ).forEach(function (el) {
+      if (c.mapsUrl) {
+        el.setAttribute(
+          'href',
+          c.mapsUrl
+        );
+
+        el.setAttribute(
+          'target',
+          '_blank'
+        );
+
+        el.setAttribute(
+          'rel',
+          'noopener'
+        );
+
+        el.style.display = '';
+      }
+
+      else {
+        el.style.display =
+          'none';
+      }
+    });
+
+    /*
+     * Socials: render only configured links,
+     * otherwise hide row.
+     */
+    document.querySelectorAll(
+      '[data-socials]'
+    ).forEach(function (row) {
       row.innerHTML = '';
-      (c.socials || []).forEach(function (soc) {
-        if (!soc || !soc.url || !/^https:\/\//i.test(soc.url)) return;
-        var map = { facebook: 'facebook', instagram: 'instagram', tiktok: 'tiktok', youtube: 'youtube' };
-        var ic = map[String(soc.platform || '').toLowerCase()] || 'info';
-        var a = document.createElement('a');
-        a.href = soc.url; a.target = '_blank'; a.rel = 'noopener';
-        a.setAttribute('aria-label', String(soc.platform || 'Social link'));
-        a.innerHTML = icon(ic);
-        row.appendChild(a);
-      });
-      if (!row.children.length) row.style.display = 'none';
+
+      (c.socials || []).forEach(
+        function (soc) {
+          if (
+            !soc ||
+            !soc.url ||
+            !/^https:\/\//i.test(
+              soc.url
+            )
+          ) {
+            return;
+          }
+
+          var map = {
+            facebook: 'facebook',
+            instagram: 'instagram',
+            tiktok: 'tiktok',
+            youtube: 'youtube'
+          };
+
+          var ic =
+            map[
+              String(
+                soc.platform || ''
+              ).toLowerCase()
+            ] ||
+            'info';
+
+          var a =
+            document.createElement(
+              'a'
+            );
+
+          a.href = soc.url;
+          a.target = '_blank';
+          a.rel = 'noopener';
+
+          a.setAttribute(
+            'aria-label',
+            String(
+              soc.platform ||
+              'Social link'
+            )
+          );
+
+          a.innerHTML =
+            icon(ic);
+
+          row.appendChild(a);
+        }
+      );
+
+      if (!row.children.length) {
+        row.style.display =
+          'none';
+      }
     });
-    // Static icon slots
-    document.querySelectorAll('[data-icon]').forEach(function (el) {
+
+    /*
+     * Static icon slots.
+     */
+    document.querySelectorAll(
+      '[data-icon]'
+    ).forEach(function (el) {
       if (el.dataset.done) return;
-      var ic = icon(el.getAttribute('data-icon'));
-      el.innerHTML = el.hasAttribute('data-append') ? el.innerHTML + ic : ic + el.innerHTML;
+
+      var ic = icon(
+        el.getAttribute(
+          'data-icon'
+        )
+      );
+
+      el.innerHTML =
+        el.hasAttribute(
+          'data-append'
+        )
+          ? el.innerHTML + ic
+          : ic + el.innerHTML;
+
       el.dataset.done = '1';
     });
-    // Active nav
-    var page = document.body.getAttribute('data-page');
-    document.querySelectorAll('[data-nav]').forEach(function (a) {
-      var key = a.getAttribute('data-nav');
-      var active = (key === page) || (key === 'menu' && page === 'menu');
-      if (active) { a.classList.add('active'); a.setAttribute('aria-current', 'page'); }
+
+    /*
+     * Active nav.
+     */
+    var page =
+      document.body.getAttribute(
+        'data-page'
+      );
+
+    document.querySelectorAll(
+      '[data-nav]'
+    ).forEach(function (a) {
+      var key =
+        a.getAttribute(
+          'data-nav'
+        );
+
+      var active =
+        (key === page) ||
+        (
+          key === 'menu' &&
+          page === 'menu'
+        );
+
+      if (active) {
+        a.classList.add(
+          'active'
+        );
+
+        a.setAttribute(
+          'aria-current',
+          'page'
+        );
+      }
     });
-    updateBadges(); refreshFavButtons();
+
+    updateBadges();
+    refreshFavButtons();
   }
+
   PG.setDealsNav = function (on) {
-    document.querySelectorAll('[data-nav="deals"]').forEach(function (a) {
-      if (on) { a.classList.add('active'); } else { a.classList.remove('active'); }
+    document.querySelectorAll(
+      '[data-nav="deals"]'
+    ).forEach(function (a) {
+      if (on) {
+        a.classList.add(
+          'active'
+        );
+      }
+
+      else {
+        a.classList.remove(
+          'active'
+        );
+      }
     });
   };
 
   PG.fatal = function (msg) {
-    var main = document.querySelector('main');
+    var main =
+      document.querySelector(
+        'main'
+      );
+
     if (!main) return;
-    main.innerHTML = '<div class="container"><div class="error-card"><h2>Something went wrong</h2><p>' +
-      esc(msg || 'Please check your connection and try again.') + '</p>' +
-      '<button class="btn btn-primary" onclick="location.reload()">Retry</button></div></div>';
+
+    main.innerHTML =
+      '<div class="container">' +
+      '<div class="error-card">' +
+
+      '<h2>Something went wrong</h2>' +
+
+      '<p>' +
+      esc(
+        msg ||
+        'Please check your connection and try again.'
+      ) +
+      '</p>' +
+
+      '<button class="btn btn-primary" onclick="location.reload()">' +
+      'Retry' +
+      '</button>' +
+
+      '</div>' +
+      '</div>';
   };
 
-  /* Image fallback -> branded placeholder (never a broken icon) */
+  /*
+   * Image fallback -> branded placeholder
+   * (never a broken icon)
+   */
   PG.imgFallback = function (img, cls) {
-    if (!img || img.dataset.fbk) return;
+    if (!img || img.dataset.fbk) {
+      return;
+    }
+
     img.dataset.fbk = '1';
-    var d = document.createElement('div');
-    d.className = 'img-fallback ' + (cls || '');
-    d.innerHTML = icon('chef') + '<span>' + esc(img.alt || "Papa Ginou's") + '</span>';
-    if (img.parentNode) img.parentNode.replaceChild(d, img);
+
+    var d =
+      document.createElement(
+        'div'
+      );
+
+    d.className =
+      'img-fallback ' +
+      (cls || '');
+
+    d.innerHTML =
+      icon('chef') +
+      '<span>' +
+      esc(
+        img.alt ||
+        "Papa Ginou's"
+      ) +
+      '</span>';
+
+    if (img.parentNode) {
+      img.parentNode.replaceChild(
+        d,
+        img
+      );
+    }
   };
-  document.addEventListener('error', function (e) {
-    var t = e.target;
-    if (t && t.tagName === 'IMG') PG.imgFallback(t);
-  }, true);
+
+  document.addEventListener(
+    'error',
+    function (e) {
+      var t = e.target;
+
+      if (
+        t &&
+        t.tagName === 'IMG'
+      ) {
+        PG.imgFallback(t);
+      }
+    },
+    true
+  );
 
   /* ================= Global events ================= */
-  document.addEventListener('click', function (e) {
-    var t;
-    if ((t = e.target.closest('[data-theme-btn]'))) { PG.toggleTheme(); return; }
-    if ((t = e.target.closest('[data-drawer-open]'))) { PG.openDrawer(); return; }
-    if ((t = e.target.closest('[data-drawer-close]')) || e.target.classList.contains('drawer-backdrop')) { PG.closeDrawer(); return; }
-    if ((t = e.target.closest('#drawer nav a'))) {
-      if (t.hasAttribute('data-search-go')) { try { sessionStorage.setItem('pgFocusSearch', '1'); } catch (err) {} }
-      PG.closeDrawer(); return;
-    }
-    if ((t = e.target.closest('[data-modal-close]')) || e.target.classList.contains('modal-backdrop')) { PG.closeModal(); sizeSelId = null; sizeSelVal = null; return; }
-    if ((t = e.target.closest('[data-size]'))) {
-      sizeSelVal = t.getAttribute('data-size');
-      var rg = t.closest('[role="radiogroup"]');
-      if (rg) rg.querySelectorAll('[data-size]').forEach(function (b) { b.setAttribute('aria-checked', b === t ? 'true' : 'false'); });
-      return;
-    }
-    if ((t = e.target.closest('[data-size-confirm]'))) {
-      var sid = sizeSelId, sval = sizeSelVal;
-      sizeSelId = null; sizeSelVal = null;
-      PG.closeModal();
-      if (sid && sval) PG.addToCart(sid, { type: 'product', sizeId: sval });
-      return;
-    }
-    if ((t = e.target.closest('[data-search-go]'))) {
-      e.preventDefault();
-      try { sessionStorage.setItem('pgFocusSearch', '1'); } catch (err) {}
-      window.location.href = 'menu.html';
-      return;
-    }
-    if ((t = e.target.closest('[data-fav]'))) {
-      e.preventDefault();
-      PG.catalogReady.then(function () { PG.toggleFav(t.getAttribute('data-fav')); });
-      return;
-    }
-    if ((t = e.target.closest('[data-add]'))) {
-      e.preventDefault();
-      var id = t.getAttribute('data-add'), type = t.getAttribute('data-type') || 'product';
-      PG.catalogReady.then(function () {
-        if (type === 'deal') PG.addToCart(id, { type: 'deal' });
-        else {
-          var p = PG.productById(id);
-          if (!p) return;
-          var info = PG.priceInfo(p);
-          if (info.kind === 'sized' && info.sizes.length >= 2) PG.openSizeSelector(id);
-          else if (info.kind === 'sized') PG.addToCart(id, { type: 'product', sizeId: info.sizes[0].id });
-          else PG.addToCart(id, { type: 'product' });
+
+  document.addEventListener(
+    'click',
+    function (e) {
+      var t;
+
+      if (
+        (t = e.target.closest(
+          '[data-theme-btn]'
+        ))
+      ) {
+        PG.toggleTheme();
+        return;
+      }
+
+      if (
+        (t = e.target.closest(
+          '[data-drawer-open]'
+        ))
+      ) {
+        PG.openDrawer();
+        return;
+      }
+
+      if (
+        (t = e.target.closest(
+          '[data-drawer-close]'
+        )) ||
+        e.target.classList.contains(
+          'drawer-backdrop'
+        )
+      ) {
+        PG.closeDrawer();
+        return;
+      }
+
+      if (
+        (t = e.target.closest(
+          '#drawer nav a'
+        ))
+      ) {
+        if (
+          t.hasAttribute(
+            'data-search-go'
+          )
+        ) {
+          try {
+            sessionStorage.setItem(
+              'pgFocusSearch',
+              '1'
+            );
+          } catch (err) {}
         }
-      });
-      return;
-    }
-  });
 
-  window.addEventListener('storage', function (e) {
-    if (e.key === CART_KEY) {
-      cart = readStore(CART_KEY, { version: 1, items: [] });
-      sanitizeCartItems();
-      updateBadges(); emit('pg:cart', { items: cart.items });
-    } else if (e.key === FAV_KEY) {
-      favs = readStore(FAV_KEY, { version: 1, ids: [] });
-      if (!Array.isArray(favs.ids)) favs.ids = [];
-      refreshFavButtons(); emit('pg:favorites', { ids: favs.ids });
-    } else if (e.key === THEME_KEY && (e.newValue === 'dark' || e.newValue === 'light')) {
-      applyTheme(e.newValue, false);
-    }
-  });
+        PG.closeDrawer();
+        return;
+      }
 
-  /* Re-read cart from storage when the page is (re)shown: covers bfcache
-     restores and app-switch returns where the 'storage' event never fires. */
+      if (
+        (t = e.target.closest(
+          '[data-modal-close]'
+        )) ||
+        e.target.classList.contains(
+          'modal-backdrop'
+        )
+      ) {
+        PG.closeModal();
+
+        sizeSelId = null;
+        sizeSelVal = null;
+
+        return;
+      }
+
+      if (
+        (t = e.target.closest(
+          '[data-size]'
+        ))
+      ) {
+        sizeSelVal =
+          t.getAttribute(
+            'data-size'
+          );
+
+        var rg =
+          t.closest(
+            '[role="radiogroup"]'
+          );
+
+        if (rg) {
+          rg.querySelectorAll(
+            '[data-size]'
+          ).forEach(
+            function (b) {
+              b.setAttribute(
+                'aria-checked',
+                b === t
+                  ? 'true'
+                  : 'false'
+              );
+            }
+          );
+        }
+
+        return;
+      }
+
+      if (
+        (t = e.target.closest(
+          '[data-size-confirm]'
+        ))
+      ) {
+        var sid = sizeSelId;
+        var sval = sizeSelVal;
+
+        sizeSelId = null;
+        sizeSelVal = null;
+
+        PG.closeModal();
+
+        if (sid && sval) {
+          PG.addToCart(
+            sid,
+            {
+              type: 'product',
+              sizeId: sval
+            }
+          );
+        }
+
+        return;
+      }
+
+      if (
+        (t = e.target.closest(
+          '[data-search-go]'
+        ))
+      ) {
+        e.preventDefault();
+
+        try {
+          sessionStorage.setItem(
+            'pgFocusSearch',
+            '1'
+          );
+        } catch (err) {}
+
+        window.location.href =
+          'menu.html';
+
+        return;
+      }
+
+      if (
+        (t = e.target.closest(
+          '[data-fav]'
+        ))
+      ) {
+        e.preventDefault();
+
+        PG.catalogReady.then(
+          function () {
+            PG.toggleFav(
+              t.getAttribute(
+                'data-fav'
+              )
+            );
+          }
+        );
+
+        return;
+      }
+
+      if (
+        (t = e.target.closest(
+          '[data-add]'
+        ))
+      ) {
+        e.preventDefault();
+
+        var id =
+          t.getAttribute(
+            'data-add'
+          );
+
+        var type =
+          t.getAttribute(
+            'data-type'
+          ) ||
+          'product';
+
+        PG.catalogReady.then(
+          function () {
+            if (type === 'deal') {
+              PG.addToCart(
+                id,
+                {
+                  type: 'deal'
+                }
+              );
+            }
+
+            else {
+              var p =
+                PG.productById(id);
+
+              if (!p) return;
+
+              var info =
+                PG.priceInfo(p);
+
+              if (
+                info.kind === 'sized' &&
+                info.sizes.length >= 2
+              ) {
+                PG.openSizeSelector(
+                  id
+                );
+              }
+
+              else if (
+                info.kind === 'sized'
+              ) {
+                PG.addToCart(
+                  id,
+                  {
+                    type: 'product',
+                    sizeId:
+                      info.sizes[0].id
+                  }
+                );
+              }
+
+              else {
+                PG.addToCart(
+                  id,
+                  {
+                    type: 'product'
+                  }
+                );
+              }
+            }
+          }
+        );
+
+        return;
+      }
+    }
+  );
+
+  /* ================= Cross-tab storage ================= */
+
+  window.addEventListener(
+    'storage',
+    function (e) {
+      if (e.key === CART_KEY) {
+        cart = readStore(
+          CART_KEY,
+          {
+            version: 1,
+            items: []
+          }
+        );
+
+        sanitizeCartItems();
+
+        /*
+         * If catalog is already loaded, immediately reconcile
+         * prices after receiving another tab's cart update.
+         */
+        if (PG.menu && PG.deals) {
+          syncCartPricesWithCatalog();
+        }
+
+        updateBadges();
+
+        emit(
+          'pg:cart',
+          {
+            items: cart.items
+          }
+        );
+      }
+
+      else if (e.key === FAV_KEY) {
+        favs = readStore(
+          FAV_KEY,
+          {
+            version: 1,
+            ids: []
+          }
+        );
+
+        if (!Array.isArray(favs.ids)) {
+          favs.ids = [];
+        }
+
+        refreshFavButtons();
+
+        emit(
+          'pg:favorites',
+          {
+            ids: favs.ids
+          }
+        );
+      }
+
+      else if (
+        e.key === THEME_KEY &&
+        (
+          e.newValue === 'dark' ||
+          e.newValue === 'light'
+        )
+      ) {
+        applyTheme(
+          e.newValue,
+          false
+        );
+      }
+    }
+  );
+
+  /*
+   * Re-read cart from storage when the page is (re)shown.
+   *
+   * This covers bfcache restores and app-switch returns where
+   * the storage event never fires.
+   */
   function resyncCartFromStore() {
-    cart = readStore(CART_KEY, { version: 1, items: [] });
+    cart = readStore(
+      CART_KEY,
+      {
+        version: 1,
+        items: []
+      }
+    );
+
     sanitizeCartItems();
-    updateBadges(); emit('pg:cart', { items: cart.items });
-  }
-  window.addEventListener('pageshow', function () { resyncCartFromStore(); });
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) resyncCartFromStore(); });
 
-  function syncOffline() { document.body.classList.toggle('is-offline', !navigator.onLine); }
-  window.addEventListener('online', syncOffline);
-  window.addEventListener('offline', syncOffline);
-
-  document.addEventListener('DOMContentLoaded', function () {
-    initTheme(); syncOffline();
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('service-worker.js').catch(function () {});
-      });
+    /*
+     * Reconcile current prices whenever the catalog is available.
+     */
+    if (PG.menu && PG.deals) {
+      syncCartPricesWithCatalog();
     }
-    document.querySelectorAll('[data-theme-btn]').forEach(function (b) {
-      b.innerHTML = icon(currentTheme() === 'dark' ? 'sun' : 'moon');
-    });
-    PG.ready.catch(function () { PG.fatal('Could not load restaurant information. Please check your connection and retry.'); });
-  });
+
+    updateBadges();
+
+    emit(
+      'pg:cart',
+      {
+        items: cart.items
+      }
+    );
+  }
+
+  window.addEventListener(
+    'pageshow',
+    function () {
+      resyncCartFromStore();
+    }
+  );
+
+  document.addEventListener(
+    'visibilitychange',
+    function () {
+      if (!document.hidden) {
+        resyncCartFromStore();
+      }
+    }
+  );
+
+  /* ================= Offline status ================= */
+
+  function syncOffline() {
+    document.body.classList.toggle(
+      'is-offline',
+      !navigator.onLine
+    );
+  }
+
+  window.addEventListener(
+    'online',
+    syncOffline
+  );
+
+  window.addEventListener(
+    'offline',
+    syncOffline
+  );
+
+  /* ================= DOM Ready ================= */
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+      initTheme();
+      syncOffline();
+
+      if (
+        'serviceWorker' in navigator
+      ) {
+        window.addEventListener(
+          'load',
+          function () {
+            navigator.serviceWorker
+              .register(
+                'service-worker.js'
+              )
+              .catch(
+                function () {}
+              );
+          }
+        );
+      }
+
+      document.querySelectorAll(
+        '[data-theme-btn]'
+      ).forEach(function (b) {
+        b.innerHTML = icon(
+          currentTheme() === 'dark'
+            ? 'sun'
+            : 'moon'
+        );
+      });
+
+      PG.ready.catch(
+        function () {
+          PG.fatal(
+            'Could not load restaurant information. Please check your connection and retry.'
+          );
+        }
+      );
+    }
+  );
 
   window.PG = PG;
 })();
