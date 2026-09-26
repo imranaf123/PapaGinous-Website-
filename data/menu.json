@@ -575,7 +575,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-crust.jpg",
+      "image": "assets/images/menu/pizza-behari-kebab.jpg",
       "availability": true,
       "displayOrder": 19
     },
@@ -598,7 +598,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-crust.jpg",
+      "image": "assets/images/menu/pizza-malai-boti.jpg",
       "availability": true,
       "displayOrder": 20
     },
@@ -621,7 +621,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-special.jpg",
+      "image": "assets/images/menu/pizza-special-extreme.jpg",
       "availability": true,
       "displayOrder": 21
     },
