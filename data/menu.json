@@ -753,7 +753,7 @@
       "price": 500,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/wrap.jpg",
+      "image": "assets/images/menu/wrap-grilled-chicken.jpg",
       "availability": true,
       "displayOrder": 32
     },
@@ -765,7 +765,7 @@
       "price": 500,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/wrap.jpg",
+      "image": "assets/images/menu/wrap-turkish.jpg",
       "availability": true,
       "displayOrder": 33
     },
@@ -777,7 +777,7 @@
       "price": 450,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/wrap.jpg",
+      "image": "assets/images/menu/wrap-crispy.jpg",
       "availability": true,
       "displayOrder": 34
     },
@@ -789,7 +789,7 @@
       "price": 300,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/wrap.jpg",
+      "image": "assets/images/menu/papa-rolls-s.jpg",
       "availability": true,
       "displayOrder": 35
     },
@@ -801,7 +801,7 @@
       "price": 450,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/wrap.jpg",
+      "image": "assets/images/menu/papa-rolls-m.jpg",
       "availability": true,
       "displayOrder": 36
     },
@@ -813,7 +813,7 @@
       "price": 250,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/hot-wings-5pc.jpg",
       "availability": true,
       "displayOrder": 37
     },
@@ -825,7 +825,7 @@
       "price": 500,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/hot-wings-10pc.jpg",
       "availability": true,
       "displayOrder": 38
     },
@@ -837,7 +837,7 @@
       "price": 300,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/bar-b-q-wings-5pc.jpg",
       "availability": true,
       "displayOrder": 39
     },
@@ -849,7 +849,7 @@
       "price": 550,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/bar-b-q-wings-10pc.jpg",
       "availability": true,
       "displayOrder": 40
     },
@@ -861,7 +861,7 @@
       "price": 250,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/nuggets-5pc.jpg",
       "availability": true,
       "displayOrder": 41
     },
