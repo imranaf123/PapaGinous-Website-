@@ -873,7 +873,7 @@
       "price": 500,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/nuggets-10pc.jpg",
       "availability": true,
       "displayOrder": 42
     },
@@ -885,7 +885,7 @@
       "price": 340,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/leg-piece.jpg",
       "availability": true,
       "displayOrder": 43
     },
@@ -897,7 +897,7 @@
       "price": 380,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/chest-piece.jpg",
       "availability": true,
       "displayOrder": 44
     },
@@ -909,7 +909,7 @@
       "price": 800,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/crispy.jpg",
+      "image": "assets/images/menu/hot-short-20pc.jpg",
       "availability": true,
       "displayOrder": 45
     },
@@ -921,7 +921,7 @@
       "price": 300,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/paratha-roll.jpg",
+      "image": "assets/images/menu/twister-roll.jpg",
       "availability": true,
       "displayOrder": 46
     },
@@ -933,7 +933,7 @@
       "price": 250,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/paratha-roll.jpg",
+      "image": "assets/images/menu/chicken-paratha-roll.jpg",
       "availability": true,
       "displayOrder": 47
     },
@@ -945,7 +945,7 @@
       "price": 280,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/paratha-roll.jpg",
+      "image": "assets/images/menu/kebab-paratha-roll.jpg",
       "availability": true,
       "displayOrder": 48
     },
@@ -957,7 +957,7 @@
       "price": 300,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/paratha-roll.jpg",
+      "image": "assets/images/menu/zinger-paratha-roll.jpg",
       "availability": true,
       "displayOrder": 49
     },
@@ -969,7 +969,7 @@
       "price": 300,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/paratha-roll.jpg",
+      "image": "assets/images/menu/malai-botti-roll.jpg",
       "availability": true,
       "displayOrder": 50
     },
@@ -981,7 +981,7 @@
       "price": 300,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/paratha-roll.jpg",
+      "image": "assets/images/menu/cheese-pratha-roll.jpg",
       "availability": true,
       "displayOrder": 51
     },
