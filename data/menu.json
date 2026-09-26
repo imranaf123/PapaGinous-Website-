@@ -633,7 +633,7 @@
       "price": 300,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/zinger.jpg",
+      "image": "assets/images/menu/burger-zinger.jpg",
       "availability": true,
       "displayOrder": 22
     },
@@ -645,7 +645,7 @@
       "price": 450,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/burger.jpg",
+      "image": "assets/images/menu/burger-special-cheese.jpg",
       "availability": true,
       "displayOrder": 23
     },
@@ -657,7 +657,7 @@
       "price": 250,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/burger.jpg",
+      "image": "assets/images/menu/burger-chicken-tikka.jpg",
       "availability": true,
       "displayOrder": 24
     },
@@ -669,7 +669,7 @@
       "price": 400,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/burger.jpg",
+      "image": "assets/images/menu/burger-pizza.jpg",
       "availability": true,
       "displayOrder": 25
     },
@@ -681,7 +681,7 @@
       "price": 570,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/burger.jpg",
+      "image": "assets/images/menu/burger-tower.jpg",
       "availability": true,
       "displayOrder": 26
     },
@@ -693,7 +693,7 @@
       "price": 350,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/burger.jpg",
+      "image": "assets/images/menu/burger-special.jpg",
       "availability": true,
       "displayOrder": 27
     },
@@ -705,7 +705,7 @@
       "price": 500,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/burger.jpg",
+      "image": "assets/images/menu/burger-moster.jpg",
       "availability": true,
       "displayOrder": 28
     },
@@ -717,7 +717,7 @@
       "price": 400,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/burger.jpg",
+      "image": "assets/images/menu/burger-crazy.jpg",
       "availability": true,
       "displayOrder": 29
     },
@@ -729,7 +729,7 @@
       "price": 400,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/burger.jpg",
+      "image": "assets/images/menu/burger-fillay-bureeger.jpg",
       "availability": true,
       "displayOrder": 30
     },
@@ -741,7 +741,7 @@
       "price": 500,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/wrap.jpg",
+      "image": "assets/images/menu/wrap-green-sauce.jpg",
       "availability": true,
       "displayOrder": 31
     },
