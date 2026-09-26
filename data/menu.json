@@ -1004,7 +1004,7 @@
         }
       ],
       "defaultSizeId": "s",
-      "image": "assets/images/menu/pasta.jpg",
+      "image": "assets/images/menu/pasta-special.jpg",
       "availability": true,
       "displayOrder": 52
     },
@@ -1027,7 +1027,7 @@
         }
       ],
       "defaultSizeId": "s",
-      "image": "assets/images/menu/pasta.jpg",
+      "image": "assets/images/menu/pasta-flaming.jpg",
       "availability": true,
       "displayOrder": 53
     },
@@ -1050,7 +1050,7 @@
         }
       ],
       "defaultSizeId": "s",
-      "image": "assets/images/menu/fries.jpg",
+      "image": "assets/images/menu/fries-regular.jpg",
       "availability": true,
       "displayOrder": 54
     },
@@ -1073,7 +1073,7 @@
         }
       ],
       "defaultSizeId": "s",
-      "image": "assets/images/menu/fries.jpg",
+      "image": "assets/images/menu/fries-loaded.jpg",
       "availability": true,
       "displayOrder": 55
     },
@@ -1096,7 +1096,7 @@
         }
       ],
       "defaultSizeId": "s",
-      "image": "assets/images/menu/fries.jpg",
+      "image": "assets/images/menu/fries-mayo-garlic.jpg",
       "availability": true,
       "displayOrder": 56
     },
@@ -1108,7 +1108,7 @@
       "price": 200,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/shawarma.jpg",
+      "image": "assets/images/menu/shawarma-chicken.jpg",
       "availability": true,
       "displayOrder": 57
     },
@@ -1120,7 +1120,7 @@
       "price": 300,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/shawarma.jpg",
+      "image": "assets/images/menu/shawarma-zinger.jpg",
       "availability": true,
       "displayOrder": 58
     },
@@ -1132,7 +1132,7 @@
       "price": 550,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/shawarma.jpg",
+      "image": "assets/images/menu/shawarma-plater.jpg",
       "availability": true,
       "displayOrder": 59
     },
@@ -1144,7 +1144,7 @@
       "price": 500,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/sandwich.jpg",
+      "image": "assets/images/menu/sandwich-special.jpg",
       "availability": true,
       "displayOrder": 60
     },
@@ -1156,7 +1156,7 @@
       "price": 500,
       "sizes": null,
       "defaultSizeId": null,
-      "image": "assets/images/menu/sandwich.jpg",
+      "image": "assets/images/menu/sandwich-malai-boti.jpg",
       "availability": true,
       "displayOrder": 61
     },
