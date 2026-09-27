@@ -114,12 +114,52 @@ body.drawer-open .drawer-backdrop{opacity:1;pointer-events:auto}
 html[data-theme="dark"] .card{border-color:var(--border)}
 .card-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--bg-soft)}
 .card-media img{width:100%;height:100%;object-fit:cover}
-.card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card-body{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
 .card-body h3{margin:0;font-size:15px;font-weight:700;line-height:1.35}
 .card-price{margin:0;font-size:14.5px;font-weight:700}
 .card-price s{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px}
-.card-desc{margin:0;font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-body .btn{margin-top:auto}
+
+/*
+ * Normal product descriptions remain compact.
+ * Deal descriptions are overridden below so their
+ * complete contents are always visible.
+ */
+.card-desc{
+  margin:0;
+  font-size:13px;
+  color:var(--muted);
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+/* ---------- Deal content ---------- */
+.deal-card .card-body{
+  min-width:0;
+  height:auto;
+}
+
+.deal-card .card-desc{
+  display:block;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  -webkit-line-clamp:unset;
+  -webkit-box-orient:initial;
+  height:auto;
+  max-height:none;
+  line-height:1.55;
+}
+
+.deal-card .card-price{
+  flex:none;
+}
+
+.deal-card .card-body .btn{
+  margin-top:auto;
+}
+
 .badge{position:absolute;top:10px;left:10px;padding:4px 12px;border-radius:999px;font-size:11.5px;font-weight:700;z-index:2}
 .badge-gold{background:var(--gold);color:var(--gold-ink)}
 .badge-red{background:var(--red);color:#fff}
@@ -259,6 +299,7 @@ body.checkout .site-footer{margin-top:40px}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
 /* ---------- Round-2 fixes ---------- */
 .ic{width:20px;height:20px;flex:none}
 .btn .ic{width:17px;height:17px}
