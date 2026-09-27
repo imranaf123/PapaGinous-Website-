@@ -5,4 +5,4 @@ Allow: /js/
 Allow: /data/
 Allow: /assets/
 
-Sitemap: https://{{PRODUCTION_DOMAIN}}/sitemap.xml
+Sitemap: https://papaginous-website.vercel.app/sitemap.xml
