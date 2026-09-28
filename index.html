@@ -41,11 +41,23 @@
     "addressLocality": "Basti Malook",
     "addressCountry": "PK"
   },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 29.850223,
+    "longitude": 71.540278
+  },
   "telephone": "+92 329 2470024",
-  "menu": "https://papaginous-website.vercel.app/menu.html"
+  "menu": "https://papaginous-website.vercel.app/menu.html",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+      "opens": "10:00",
+      "closes": "01:00"
+    }
+  ]
 }
-</script> 
-  <meta name="google-site-verification" content="9i-t0AJJssGiqgVckHdSrPXAoer9AvJpxHz-F45b304" />
+</script>
 </head>
 <body data-page="home">
 <header class="site-header">
@@ -69,7 +81,6 @@
       <a class="icon-btn" href="cart.html" aria-label="Open cart"><span data-icon="cart" aria-hidden="true"></span><span class="cart-count" data-cart-badge hidden>0</span></a>
     </div>
   </div>
-  
 </header>
 
 <div class="drawer-backdrop"></div>
