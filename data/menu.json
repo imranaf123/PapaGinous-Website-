@@ -175,7 +175,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-peri-peri.jpg",
+      "image": "assets/images/menu/pizza-peri-peri.webp",
       "availability": true,
       "displayOrder": 4
     },
@@ -203,7 +203,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-creamy.jpg",
+      "image": "assets/images/menu/pizza-creamy.webp",
       "availability": true,
       "displayOrder": 5
     },
@@ -231,7 +231,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-nawabi.jpg",
+      "image": "assets/images/menu/pizza-nawabi.webp",
       "availability": true,
       "displayOrder": 6
     },
@@ -259,7 +259,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-lazania.jpg",
+      "image": "assets/images/menu/pizza-lazania.webp",
       "availability": true,
       "displayOrder": 7
     },
@@ -287,7 +287,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-sicilian.jpg",
+      "image": "assets/images/menu/pizza-sicilian.webp",
       "availability": true,
       "displayOrder": 8
     },
@@ -315,7 +315,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-cream-cheese.jpg",
+      "image": "assets/images/menu/pizza-cream-cheese.webp",
       "availability": true,
       "displayOrder": 9
     },
@@ -343,7 +343,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-thin.jpg",
+      "image": "assets/images/menu/pizza-thin.webp",
       "availability": true,
       "displayOrder": 10
     },
@@ -371,7 +371,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-super-supreme.jpg",
+      "image": "assets/images/menu/pizza-super-supreme.webp",
       "availability": true,
       "displayOrder": 11
     },
@@ -399,7 +399,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-chicken-tikka.jpg",
+      "image": "assets/images/menu/pizza-chicken-tikka.webp",
       "availability": true,
       "displayOrder": 12
     },
@@ -427,7 +427,7 @@
         }
       ],
       "defaultSizeId": "m",
-      "image": "assets/images/menu/pizza-chicken-fajita.jpg",
+      "image": "assets/images/menu/pizza-chicken-fajita.webp",
       "availability": true,
       "displayOrder": 13
     },
